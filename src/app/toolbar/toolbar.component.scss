@@ -24,7 +24,14 @@ p {
   align-items: center;
   background-color: #1976d2;
   color: white;
-  font-weight: 600;
+  font-weight: 600; 
+
+  &__auth{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
 }
 
 .toolbar {
