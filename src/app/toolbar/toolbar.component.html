@@ -1,7 +1,7 @@
 <div class="toolbar" role="banner">
   <span>LOGO</span>
   <div class="spacer"></div>
-  <button mat-raised-button color="primary" *ngIf="authService.userData" routerLink="quastion">
+  <button mat-raised-button color="primary" *ngIf="authService.user | async" routerLink="quastion">
     Новый Вопрос
   </button>
   <a target="_blank" rel="noopener" (click)="openDialog()" title="User">
@@ -12,7 +12,7 @@
     />
     <!-- <img id="user-logo" src="https://img.icons8.com/external-sbts2018-mixed-sbts2018/58/000000/external-logout-social-media-basic-1-sbts2018-mixed-sbts2018.png" alt=""> -->
   </a>
-  <div *ngIf="authService.userData as user" class="toolbar__auth">
+  <div *ngIf="(authService.user | async) as user" class="toolbar__auth">
     <p>{{ user.email ? user.email : "User" }}</p>
     <div class="example-button-container" style="margin-left: 10px;">
       <button mat-mini-fab [matMenuTriggerFor]="menu" color="primary" aria-label="Example icon button with a menu icon">

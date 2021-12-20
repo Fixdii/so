@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { AuthServiceService } from '../services/auth-service.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-auth-form',
@@ -18,7 +18,7 @@ export class AuthFormComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<AuthFormComponent>,
     private fb: FormBuilder,
-    private authServiceService: AuthServiceService,
+    private authService: AuthService,
   ) {
     this.formGroup = this.fb.group({
       email: ['', Validators.required],
@@ -27,40 +27,45 @@ export class AuthFormComponent implements OnInit {
   }
 
   submit() {
-    const email = this.formGroup.value.email;
-    const password = this.formGroup.value.password;
+    const { email, password } = this.formGroup.value;
+    
+    const method = this.isLogin 
+      ? this.authService.logIn
+      : this.authService.signIn;
 
-    if (this.isAuthorised) {
-      const res = this.authServiceService.signIn(email, password);      
-    } else {
-      this.authServiceService.logIn(email, password);
-    }
-
-    this.closeDialog();
-    this.formGroup.reset();
+    method(email, password)
+      .then((res) => {
+        if (res !== false) {
+          this.closeDialog();
+        }
+      })
+      .catch(err => { console.error(err); });
   }
 
   loginGoogle(){
-    this.authServiceService.loginWithGoogle();
+    this.authService.loginWithGoogle();
+  }
+  
+  loginFacebook(){
+    this.authService.loginWithFacebook();
   }
 
   signUp() {
-    this.authServiceService.isLoginSubj.next(true);
-    this.authServiceService.isAuthUserSubj.next(true);
+    this.authService.isLoginSubj.next(true);
+    this.authService.isAuthUserSubj.next(true);
   }
 
   closeDialog() {
     this.dialogRef.close();
-    this.formGroup.reset();
-    this.authServiceService.isLoginSubj.next(false);
-    this.authServiceService.isAuthUserSubj.next(false);
+    this.authService.isLoginSubj.next(false);
+    this.authService.isAuthUserSubj.next(false);
   }
 
   ngOnInit(): void {
-    this.authServiceService.isAuthUserSubj.subscribe((res) => {
+    this.authService.isAuthUserSubj.subscribe((res) => {
       this.isAuthorised = res;
     });
-    this.authServiceService.isLoginSubj.subscribe((res) => {
+    this.authService.isLoginSubj.subscribe((res) => {
       this.isLogin = res;
     });
   }

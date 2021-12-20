@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthFormComponent } from '../auth-form/auth-form.component';
-import { AuthServiceService } from '../services/auth-service.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-toolbar',
@@ -11,11 +11,10 @@ import { AuthServiceService } from '../services/auth-service.service';
 export class ToolbarComponent implements OnInit {
   isAuthorised = false;
   isOpen = false;
-  user: any;
 
   constructor(
     public dialog: MatDialog,
-    public authService: AuthServiceService
+    public authService: AuthService
   ) {}
 
   openDialog(): void {
@@ -35,7 +34,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   receiveUser() {
-    console.log(this.authService.userData);    
+    console.log(this.authService.user);    
   }
 
   ngOnInit(): void {

@@ -10,13 +10,14 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon'
 
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
 import { AuthFormComponent } from './auth-form/auth-form.component';
 import { environment } from 'src/environments/environment';
+import { AuthService } from './services/auth.service';
 @NgModule({
   declarations: [AppComponent,ToolbarComponent, AuthFormComponent],
   imports: [
@@ -34,7 +35,10 @@ import { environment } from 'src/environments/environment';
     MatButtonModule,
     MatIconModule
   ],
-  providers: [ { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } }, ],
+  providers: [ 
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } }, 
+    AuthService
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
