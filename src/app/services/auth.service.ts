@@ -19,12 +19,11 @@ export type User = {
   role: UserRole
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 
 export class AuthService {
-  isAuthUserSubj = new BehaviorSubject<boolean>(false);
-  isLoginSubj = new BehaviorSubject<boolean>(false);
-  
   get user() {
     return this.afAuth.authState
   }
@@ -32,11 +31,12 @@ export class AuthService {
   constructor(
     private afAuth: AngularFireAuth,
     public afs: AngularFirestore,
-    // public ngZone: NgZone
   ) {
   }
 
   logIn(email: string, password: string) {
+    console.log(1);
+    
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
@@ -45,6 +45,8 @@ export class AuthService {
   }
 
   signIn(email: string, password: string) {
+    console.log(2);
+
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
@@ -68,7 +70,7 @@ export class AuthService {
       })
   }
 
-  authLogin(provider: firebase.auth.GoogleAuthProvider) {
+  authLogin(provider: firebase.auth.AuthProvider) {
     return this.afAuth.signInWithPopup(provider)
     .then((result) => {
       //  this.ngZone.run(() => {

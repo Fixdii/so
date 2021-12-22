@@ -14,12 +14,19 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon'
 
 import { AppComponent } from './app.component';
-import { ToolbarComponent } from './toolbar/toolbar.component';
-import { AuthFormComponent } from './auth-form/auth-form.component';
+import { ToolbarComponent } from './core/toolbar/toolbar.component';
+import { AuthFormComponent } from './core/auth-form/auth-form.component';
 import { environment } from 'src/environments/environment';
 import { AuthService } from './services/auth.service';
+import { LogInComponent } from './pages/log-in/log-in.component';
+import { HomeComponent } from './pages/home/home.component';
+import { AppRoutingModule } from './app-routing.module';
 @NgModule({
-  declarations: [AppComponent,ToolbarComponent, AuthFormComponent],
+  declarations: [
+    AppComponent,
+    ToolbarComponent, 
+    AuthFormComponent, LogInComponent, HomeComponent
+  ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
@@ -33,11 +40,11 @@ import { AuthService } from './services/auth.service';
     MatListModule,
     MatMenuModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    AppRoutingModule
   ],
   providers: [ 
-    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } }, 
-    AuthService
+    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } }
   ],
   bootstrap: [AppComponent],
 })
