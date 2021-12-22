@@ -6,9 +6,8 @@ import {
 } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
-import { UserData, UserRole } from '../entities/user.entity';
+import { UserData, UserRole } from '../../entities/user.entity';
 import { map } from 'rxjs/operators';
-import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -30,7 +29,7 @@ export class AuthService {
       );
   }
 
-  constructor(private afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) {}
+  constructor(private afAuth: AngularFireAuth, public afs: AngularFirestore) {}
 
 
   logIn(email: string, password: string) {
@@ -41,7 +40,7 @@ export class AuthService {
       });
   }
 
-  signIn(email: string, password: string) {
+  signUn(email: string, password: string) {
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
@@ -67,9 +66,6 @@ export class AuthService {
     return this.afAuth
       .signInWithPopup(provider)
       .then((result) => {
-        //  this.ngZone.run(() => {
-        //     this.router.navigate(['dashboard']);
-        //   })
         return this.setUserData(result.user);
       })
       .catch((error) => {
