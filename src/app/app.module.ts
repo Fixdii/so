@@ -20,11 +20,12 @@ import { LogInComponent } from './pages/log-in/log-in.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { UserNamePipe } from './core/pipes/user-name.pipe';
+import { SignUpComponent } from './pages/sign-up/sign-up.component';
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
-    AuthFormComponent, LogInComponent, HomeComponent, UserNamePipe
+    AuthFormComponent, LogInComponent, SignUpComponent, HomeComponent, UserNamePipe
   ],
   imports: [
     BrowserModule,

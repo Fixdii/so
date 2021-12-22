@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -10,7 +10,7 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class AuthFormComponent implements OnInit {
   formGroup!: FormGroup;
-  isSignUp: boolean = false;
+  @Input() isSignUp: boolean = false;
 
   constructor(
     private fb: FormBuilder,
@@ -18,12 +18,12 @@ export class AuthFormComponent implements OnInit {
     private router: Router
   ) {}
 
-  // Validators.pattern('((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})')
+  //Validators.pattern('((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})')
 
   ngOnInit(): void {
     this.formGroup = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
+      password: ['', [Validators.required]],
     });
   }
 
@@ -40,8 +40,8 @@ export class AuthFormComponent implements OnInit {
   }
 
   signIn(email: string, password: string) {
-    return this.isSignUp
-      ? this.authService.signIn(email, password)
+    return this.isSignUp 
+      ? this.authService.signUp(email, password)
       : this.authService.logIn(email, password);
   }
 
@@ -51,11 +51,5 @@ export class AuthFormComponent implements OnInit {
 
   loginFacebook(){
     this.authService.loginWithFacebook();
-  }
-
-  toggleForm(event: Event) {
-    event.preventDefault();
-
-    this.isSignUp = !this.isSignUp;
   }
 }
