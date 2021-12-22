@@ -1,7 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
+
 @Component({
   selector: 'app-auth-form',
   templateUrl: './auth-form.component.html',
@@ -40,14 +41,14 @@ export class AuthFormComponent implements OnInit {
 
   signIn(email: string, password: string) {
     return this.isSignUp 
-      ? this.authService.signUn(email, password)
+      ? this.authService.signUp(email, password)
       : this.authService.logIn(email, password);
   }
 
   loginGoogle(){
     this.authService.loginWithGoogle();
   }
-  
+
   loginFacebook(){
     this.authService.loginWithFacebook();
   }

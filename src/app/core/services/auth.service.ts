@@ -6,7 +6,7 @@ import {
 } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
-import { UserData, UserRole } from '../../entities/user.entity';
+import { UserData, UserRole } from '../models/user.entity';
 import { map } from 'rxjs/operators';
 
 @Injectable({
@@ -20,9 +20,9 @@ export class AuthService {
     return this.afAuth.authState;
   }
 
-  get isLoggedIn(): Observable<boolean> {    
+  get isLoggedIn(): Observable<boolean> {
     return this.user
-      .pipe( 
+      .pipe(
         map((user) => {
           return !!user;
         })
@@ -40,7 +40,7 @@ export class AuthService {
       });
   }
 
-  signUn(email: string, password: string) {
+  signUp(email: string, password: string) {
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {

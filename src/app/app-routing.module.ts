@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './pages/home/home.component';
 import { LogInComponent } from './pages/log-in/log-in.component';
 import { SignUpComponent } from './pages/sign-up/sign-up.component';
-import { AuthGuard } from './shared/guards/auth.guard';
-import { IsLoggedInGuard } from './shared/guards/is-logged-in.guard';
+import { IsLoggedInGuard } from './core/guards/is-logged-in.guard';
+import { AuthGuard } from './core/guards/auth.guard';
 
 const routes: Routes = [
   { path: 'log-in', component: LogInComponent, canActivate: [IsLoggedInGuard] },
