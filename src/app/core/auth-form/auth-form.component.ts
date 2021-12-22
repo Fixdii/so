@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -9,19 +10,20 @@ import { AuthService } from '../../services/auth.service';
 })
 export class AuthFormComponent implements OnInit {
   formGroup!: FormGroup;
-  // subscribers: any[] = [];
-  // isAuthorised: boolean = false;
-  isLogin: boolean = false;
+  isSignUp: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
+    private router: Router
   ) {}
+
+  // Validators.pattern('((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})')
 
   ngOnInit(): void {
     this.formGroup = this.fb.group({
-      email: ['', Validators.required, Validators.email],
-      password: ['', Validators.required, Validators.pattern('((?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,30})')],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
     });
   }
 
@@ -31,14 +33,14 @@ export class AuthFormComponent implements OnInit {
     this.signIn(email, password)
       .then((res) => {
         if (res !== false) {
-          // this.closeDialog();
+          this.router.navigate(['']);
         }
       })
       .catch(err => { console.error(err); });
   }
 
   signIn(email: string, password: string) {
-    return this.isLogin 
+    return this.isSignUp 
       ? this.authService.signIn(email, password)
       : this.authService.logIn(email, password);
   }
@@ -53,8 +55,7 @@ export class AuthFormComponent implements OnInit {
 
   toggleForm(event: Event) {
     event.preventDefault();
-    event.stopPropagation();
-
-    this.isLogin = !this.isLogin;
+    
+    this.isSignUp = !this.isSignUp;
   }
 }

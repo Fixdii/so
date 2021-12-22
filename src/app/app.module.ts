@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatDialogModule, MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { HttpClientModule } from '@angular/common/http';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from "@angular/fire/compat/auth";
@@ -17,20 +16,19 @@ import { AppComponent } from './app.component';
 import { ToolbarComponent } from './core/toolbar/toolbar.component';
 import { AuthFormComponent } from './core/auth-form/auth-form.component';
 import { environment } from 'src/environments/environment';
-import { AuthService } from './services/auth.service';
 import { LogInComponent } from './pages/log-in/log-in.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AppRoutingModule } from './app-routing.module';
+import { UserNamePipe } from './shared/pipes/user-name.pipe';
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent, 
-    AuthFormComponent, LogInComponent, HomeComponent
+    AuthFormComponent, LogInComponent, HomeComponent, UserNamePipe
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
-    MatDialogModule,
     BrowserAnimationsModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -43,9 +41,7 @@ import { AppRoutingModule } from './app-routing.module';
     MatIconModule,
     AppRoutingModule
   ],
-  providers: [ 
-    { provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: { hasBackdrop: false } }
-  ],
+  providers: [ ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

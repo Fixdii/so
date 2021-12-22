@@ -1,109 +1,107 @@
-import { Injectable, NgZone } from '@angular/core';
-import { BehaviorSubject} from 'rxjs';
+import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { AngularFirestore, AngularFirestoreDocument} from '@angular/fire/compat/firestore';
+import {
+  AngularFirestore,
+  AngularFirestoreDocument,
+} from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
-
-export enum UserRole {
-  'User' = 'User',
-  'Admin' = 'Admin'
-}
-
-export type User = {
-  uid: string;
-  email: string;
-  displayName: string;
-  photoURL: string;
-  emailVerified: boolean;
-  deleted: boolean;
-  role: UserRole
-}
+import { Observable } from 'rxjs';
+import { UserData, UserRole } from '../entities/user.entity';
+import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 
 export class AuthService {
+  awdwaw!: boolean;
+
   get user() {
-    return this.afAuth.authState
+    return this.afAuth.authState;
   }
 
-  constructor(
-    private afAuth: AngularFireAuth,
-    public afs: AngularFirestore,
-  ) {
+  get isLoggedIn(): Observable<boolean> {    
+    return this.user
+      .pipe( 
+        map((user) => {
+          return !!user;
+        })
+      );
   }
+
+  constructor(private afAuth: AngularFireAuth, public afs: AngularFirestore, private router: Router) {}
+
 
   logIn(email: string, password: string) {
-    console.log(1);
-    
     return this.afAuth
       .signInWithEmailAndPassword(email, password)
       .then((result) => {
         return true;
-      })
+      });
   }
 
   signIn(email: string, password: string) {
-    console.log(2);
-
     return this.afAuth
       .createUserWithEmailAndPassword(email, password)
       .then((result) => {
         return this.setUserData(result.user);
-      })
+      });
   }
 
   loginWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
-    return this.authLogin(provider)
-      .then((result) => {
-        return true;
-      })
+    return this.authLogin(provider).then((result) => {
+      return true;
+    });
   }
 
   loginWithFacebook() {
     const provider = new firebase.auth.FacebookAuthProvider();
-    return this.authLogin(provider)
-      .then((result) => {
-        return true;
-      })
+    return this.authLogin(provider).then((result) => {
+      return true;
+    });
   }
 
   authLogin(provider: firebase.auth.AuthProvider) {
-    return this.afAuth.signInWithPopup(provider)
-    .then((result) => {
-      //  this.ngZone.run(() => {
-      //     this.router.navigate(['dashboard']);
-      //   })
-      return this.setUserData(result.user);
-    }).catch((error) => {
-      alert(error)
-    })
+    return this.afAuth
+      .signInWithPopup(provider)
+      .then((result) => {
+        //  this.ngZone.run(() => {
+        //     this.router.navigate(['dashboard']);
+        //   })
+        return this.setUserData(result.user);
+      })
+      .catch((error) => {
+        alert(error);
+      });
   }
 
   setUserData(user: firebase.User | null) {
     if (!user) {
-      return this.signOut()
-        .then(r => false)
+      return this.signOut().then((r) => false);
     }
 
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`
     );
 
-    const userData: User = {
+    const userData: UserData = {
       uid: user.uid,
       email: user.email || '',
       displayName: user.displayName || 'Anonymous',
-      photoURL: user.photoURL || 'https://material.angular.io/assets/img/examples/shiba1.jpg',
+      photoURL:
+        user.photoURL ||
+        'https://material.angular.io/assets/img/examples/shiba1.jpg',
       emailVerified: user.emailVerified,
       deleted: false,
       role: UserRole.User,
     };
-    return userRef.set(userData, {
-      merge: true,
-    }).then(r => true)
+    return userRef
+      .set(userData, {
+        merge: true,
+      })
+      .then((r) => true);
   }
 
   signOut() {

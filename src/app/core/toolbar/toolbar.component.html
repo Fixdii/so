@@ -10,17 +10,16 @@
       src="http://s1.iconbird.com/ico/0612/GooglePlusInterfaceIcons/w128h1281338911651user.png"
       alt=""
     />
-    <!-- <img id="user-logo" src="https://img.icons8.com/external-sbts2018-mixed-sbts2018/58/000000/external-logout-social-media-basic-1-sbts2018-mixed-sbts2018.png" alt=""> -->
   </a>
   <div *ngIf="(authService.user | async) as user" class="toolbar__auth">
-    <p>{{ user.email ? user.email : "User" }}</p>
+    <p>{{ user.email ? (user.email | userName) : "User" }}</p>
     <div class="example-button-container" style="margin-left: 10px;">
       <button mat-mini-fab [matMenuTriggerFor]="menu" color="primary" aria-label="Example icon button with a menu icon">
         <mat-icon>menu</mat-icon>
       </button>
     </div>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="authService.signOut()">Выйти</button>
+      <button mat-menu-item (click)="signOut()">Выйти</button>
     </mat-menu>
   </div>
 </div>
