@@ -6,7 +6,7 @@ import {
 } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
 import { Observable } from 'rxjs';
-import { UserData, UserRole } from '../entities/user.entity';
+import { UserData, UserRole } from '../models/user.entity';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -21,9 +21,9 @@ export class AuthService {
     return this.afAuth.authState;
   }
 
-  get isLoggedIn(): Observable<boolean> {    
+  get isLoggedIn(): Observable<boolean> {
     return this.user
-      .pipe( 
+      .pipe(
         map((user) => {
           return !!user;
         })

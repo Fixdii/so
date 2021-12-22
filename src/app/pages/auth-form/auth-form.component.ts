@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-auth-form',
@@ -40,7 +40,7 @@ export class AuthFormComponent implements OnInit {
   }
 
   signIn(email: string, password: string) {
-    return this.isSignUp 
+    return this.isSignUp
       ? this.authService.signIn(email, password)
       : this.authService.logIn(email, password);
   }
@@ -48,14 +48,14 @@ export class AuthFormComponent implements OnInit {
   loginGoogle(){
     this.authService.loginWithGoogle();
   }
-  
+
   loginFacebook(){
     this.authService.loginWithFacebook();
   }
 
   toggleForm(event: Event) {
     event.preventDefault();
-    
+
     this.isSignUp = !this.isSignUp;
   }
 }
