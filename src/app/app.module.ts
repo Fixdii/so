@@ -11,21 +11,21 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon'
+import {MatCardModule} from '@angular/material/card';
+
 
 import { AppComponent } from './app.component';
 import { ToolbarComponent } from './core/components/toolbar/toolbar.component';
 import { AuthFormComponent } from './pages/auth-form/auth-form.component';
 import { environment } from 'src/environments/environment';
-import { LogInComponent } from './pages/log-in/log-in.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { UserNamePipe } from './core/pipes/user-name.pipe';
-import { SignUpComponent } from './pages/sign-up/sign-up.component';
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
-    AuthFormComponent, LogInComponent, SignUpComponent, HomeComponent, UserNamePipe
+    AuthFormComponent, HomeComponent, UserNamePipe
   ],
   imports: [
     BrowserModule,
@@ -40,7 +40,8 @@ import { SignUpComponent } from './pages/sign-up/sign-up.component';
     MatMenuModule,
     MatButtonModule,
     MatIconModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MatCardModule
   ],
   providers: [],
   bootstrap: [AppComponent],

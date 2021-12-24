@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { PATHS } from '../../models';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -18,6 +19,6 @@ export class ToolbarComponent implements OnInit {
 
   async signOut() {
     await this.authService.signOut();
-    await this.router.navigate(['log-in']);
+    await this.router.navigate([PATHS.LOG_IN]);
   }
 }

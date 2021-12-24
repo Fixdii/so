@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { PATHS } from 'src/app/core/models';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -9,54 +10,45 @@ import { AuthService } from '../../core/services/auth.service';
   styleUrls: ['./auth-form.component.scss'],
 })
 export class AuthFormComponent implements OnInit {
-  error: string = '';
+  error = '';
+  activeRoute: string;
+  isSignUp = false;
 
-  formGroup!: FormGroup;
-
-  @Input() isSignUp: boolean = false;
+  formGroup: FormGroup;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private activateRoute: ActivatedRoute
+  ) {
+    this.activeRoute = this.activateRoute.snapshot.routeConfig.path
+  }
 
   ngOnInit(): void {
+    this.isSignUp = this.activeRoute === PATHS.SIGN_UP;
     this.formGroup = this.fb.group({
       email: [
         '',
         [
           Validators.required,
-          Validators.email,
-          Validators.pattern(
-            /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-          ),
+          Validators.pattern('^[[A-Za-z0-9./()^_%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
         ],
       ],
       password: [
         '',
         [
           Validators.required,
-          Validators.pattern('((?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,30})'),
+          Validators.pattern('(?=.*?[a-zA-Z])(?=.*?[0-9]).{8,30}'),
         ],
       ],
     });
-
-    console.log(this.formGroup.get('email'));
   }
 
   submit() {
     const { email, password } = this.formGroup.value;
     this.error = '';
-    this.signIn(email, password)
-      .then((res) => {
-        if (res !== false) {
-          this.router.navigate(['']);
-        }
-      })
-      .catch((err) => {
-        this.error = err.message;
-      });
+    this.handler(this.signIn(email, password));
   }
 
   signIn(email: string, password: string) {
@@ -66,28 +58,21 @@ export class AuthFormComponent implements OnInit {
   }
 
   loginGoogle() {
-    this.authService
-      .loginWithGoogle()
-      .then((res) => {
-        if (res !== false) {
-          this.router.navigate(['']);
-        }
-      })
-      .catch((err) => {
-        this.error = err.message;
-      });
+    this.handler(this.authService.loginWithGoogle());
   }
 
   loginFacebook() {
-    this.authService
-      .loginWithFacebook()
-      .then((res) => {
-        if (res !== false) {
-          this.router.navigate(['']);
-        }
-      })
-      .catch((err) => {
-        this.error = err.message;
-      });
+    this.handler(this.authService.loginWithFacebook());
+  }
+
+  handler(promise: Promise<boolean>){
+    promise.then((res) => {
+      if (res) {
+        this.router.navigate(['']);
+      }
+    })
+    .catch((err) => {
+      this.error = err.message;
+    });
   }
 }

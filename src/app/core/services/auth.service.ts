@@ -14,8 +14,6 @@ import { map } from 'rxjs/operators';
 })
 
 export class AuthService {
-  awdwaw!: boolean;
-
   get user() {
     return this.afAuth.authState;
   }
@@ -24,7 +22,7 @@ export class AuthService {
     return this.user
       .pipe(
         map((user) => {
-          return !!user;
+          return Boolean(user);
         })
       );
   }
@@ -68,9 +66,6 @@ export class AuthService {
       .then((result) => {
         return this.setUserData(result.user);
       })
-      .catch((error) => {
-        alert(error);
-      });
   }
 
   setUserData(user: firebase.User | null) {
