@@ -1,0 +1,13 @@
+<div class="quastionCard">
+  <mat-card *ngFor="let question of (quastions | async)" class="example-card">
+    <mat-card-title>Shiba Inu</mat-card-title>
+    <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+    <mat-card-content>
+      <p>This card indeterminates progress bar.</p>
+      <p>Text question</p>
+    </mat-card-content>
+    <mat-card-actions class="card_button">
+      <button *ngIf="(userData | async)?.role === ROLES.Admin" mat-button (click)="approveQuestion(question.id)">approve</button>
+    </mat-card-actions>
+  </mat-card>    
+</div>

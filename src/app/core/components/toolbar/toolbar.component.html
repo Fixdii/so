@@ -1,8 +1,8 @@
 <div class="toolbar" role="banner">
-  <span>LOGO</span>
+  <a routerLink="" class="logo">LOGO</a>
   <div class="spacer"></div>
-  <button mat-raised-button color="primary" *ngIf="authService.user | async" routerLink="quastion">
-    Add quastion
+  <button mat-raised-button color="primary" *ngIf="authService.user | async" routerLink="createquastion">
+    Add question
   </button>
   <a rel="noopener" title="User">
     <img
@@ -12,6 +12,7 @@
     />
   </a>
   <div *ngIf="(authService.user | async) as user" class="toolbar__auth">
+    awdwada
     <p>{{ user.email ? user.email : "User" }}</p>
     <div class="example-button-container" style="margin-left: 10px;">
       <button mat-mini-fab [matMenuTriggerFor]="menu" color="primary" aria-label="Example icon button with a menu icon">

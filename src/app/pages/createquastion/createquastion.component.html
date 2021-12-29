@@ -1,0 +1,60 @@
+<div class="createquastion">  
+      <form class="form" [formGroup]="formGroup" (ngSubmit)="submit()">
+        <h2 class="createquastion_title">New Question</h2>
+        <!-- <div class="question__item" *ngIf="error">
+          <p class="question__error">{{ error }}</p>
+        </div> -->
+        <div class="createquastion_item">
+          <label for="title" class="question__form-title">Title</label>
+          <div class="createquastion_input">
+            <input type="text"
+                   id="title"
+                   class="input"
+                   placeholder="Title"
+                   formControlName="title">
+            <ng-container *ngIf="formGroup.get('title')">
+            <div *ngIf="formGroup.get('title').invalid && formGroup.get('title').touched">
+                <small class="error" *ngIf="formGroup.get('title').errors.required"
+                >The field cannot be empty</small>
+                </div>
+        </ng-container>
+          </div>
+        </div>
+        <div class="createquastion_item">
+          <label for="text">Text</label>
+          <div class="createquastion_textarea">
+            <textarea id="text"
+                      class="textarea"
+                      placeholder="Type something..."
+                      formControlName="text">
+            </textarea>
+            <ng-container *ngIf="formGroup.get('text')" class="error">
+                <div *ngIf="formGroup.get('text').invalid && formGroup.get('text').touched">
+                    <small class="error" *ngIf="formGroup.get('text').errors.required"
+                    >The field cannot be empty</small>
+                  </div>
+            </ng-container>
+          </div>
+        </div>  
+        <div class="createquastion_item">
+          <p>Tags</p>
+          <div class="createquastion_tags">
+            <div *ngFor="let tag of TAGS" class="form-check">
+                <input class="form-check-input" type="radio"  formControlName="tag" [id]="tag" [value]="tag" required>
+                <label class="form-check-label" [for]="tag">
+                    {{tag}}
+                </label>
+            </div>
+        </div>                
+        </div>
+        <div class="error_tags" *ngIf="formGroup.get('tag').invalid && formGroup.get('tag').errors.required">
+            <small>*Select one of the categories</small>
+        </div>
+  
+        <div class="createquastion_button">
+          <button type="submit" [disabled]="!formGroup.valid" class="btn btn-primary">Ok</button>
+          <button type="button" class="btn btn-danger">Cancel</button>
+        </div>
+  
+      </form>
+</div>

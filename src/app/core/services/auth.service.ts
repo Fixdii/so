@@ -5,9 +5,9 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
-import { Observable } from 'rxjs';
+import { from, Observable, of, zip } from 'rxjs';
 import { UserData, UserRole } from '../models/user.entity';
-import { map } from 'rxjs/operators';
+import { concatMap, debounceTime, map, mergeMap, switchMap, take } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -15,13 +15,25 @@ import { map } from 'rxjs/operators';
 
 export class AuthService {
   get user() {
-    return this.afAuth.authState;
+    return this.afAuth.authState
+  }
+
+  get userData() {
+    return this.afAuth.authState.pipe(
+      concatMap(user => {
+        // console.log(user);
+        console.log(user.email);
+        // return user;
+        return this.getUserData(user)
+      }),
+    );
   }
 
   get isLoggedIn(): Observable<boolean> {
     return this.user
       .pipe(
         map((user) => {
+          console.log(true);
           return Boolean(user);
         })
       );
@@ -31,19 +43,23 @@ export class AuthService {
 
 
   logIn(email: string, password: string) {
-    return this.afAuth
-      .signInWithEmailAndPassword(email, password)
-      .then((result) => {
-        return true;
-      });
+    return from(this.afAuth
+        .signInWithEmailAndPassword(email, password)
+      ).pipe(
+        mergeMap(result => {
+          return this.setUserData(result.user)
+        })
+      );
   }
 
   signUp(email: string, password: string) {
-    return this.afAuth
+    return from(this.afAuth
       .createUserWithEmailAndPassword(email, password)
-      .then((result) => {
-        return this.setUserData(result.user);
-      });
+    ).pipe(
+      mergeMap(result => {
+        return this.setUserData(result.user)
+      })
+    );
   }
 
   loginWithGoogle() {
@@ -70,7 +86,7 @@ export class AuthService {
 
   setUserData(user: firebase.User | null) {
     if (!user) {
-      return this.signOut().then((r) => false);
+      return from(this.signOut().then((r) => false));
     }
 
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
@@ -88,14 +104,53 @@ export class AuthService {
       deleted: false,
       role: UserRole.User,
     };
-    return userRef
-      .set(userData, {
-        merge: true,
+    return this.getUserData(user).pipe(
+      concatMap(res => {
+        if (res !== null) {
+          return from(userRef
+            .set(userData, {
+              merge: true,
+            })
+            .then((r) => true));
+        } else {
+          return of(true);
+        }
       })
-      .then((r) => true);
+    )
+     
   }
 
   signOut() {
     return this.afAuth.signOut();
+  }
+
+  getUserData(user: firebase.User | null): Observable<UserData | null> {
+    if (!user) {
+      return of(null);
+    }
+
+    const userRef: AngularFirestoreDocument<UserData> = this.afs.doc(
+      `users/${user.uid}`
+    );
+
+    // const userData: UserData = {
+    //   uid: user.uid,
+    //   email: user.email || '',
+    //   displayName: user.displayName || 'Anonymous',
+    //   photoURL:
+    //     user.photoURL ||
+    //     'https://material.angular.io/assets/img/examples/shiba1.jpg',
+    //   emailVerified: user.emailVerified,
+    //   deleted: false,
+    //   role: UserRole.User,
+    // };
+    return userRef
+      .get().pipe(
+        map(results => {
+
+          console.log(results);
+          return results.data();
+        })
+      )
   }
 }

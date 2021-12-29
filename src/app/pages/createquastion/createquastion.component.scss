@@ -1,0 +1,66 @@
+ button {
+   margin-top: 10px;
+   border-radius: 20px;
+   width: 100px;
+   height: 40px;
+ }
+
+ form {
+   margin: auto;
+   margin-top: 25vh;
+   max-width: 750px;
+   padding: 20px;
+   background: #f4f4f4;
+   border-radius: 25px;
+ }
+
+ .createquastion {
+   &_title {
+     text-align: center;
+   }
+
+   &_item {
+     display: flex;
+     justify-content: center;
+   }
+
+   &_button {
+     display: flex;
+     justify-content: space-around;
+   }
+
+   &_input {
+     margin-left: 20px;
+     margin-bottom: 35px;
+   }
+
+   &_textarea {
+     margin-left: 20px;
+     margin-bottom: 30px;
+   }
+
+   &_tags {
+     width: 500px;
+     display: flex;
+     justify-content: space-around;
+   }
+ }
+
+ .error {
+   color: red;
+
+   &_tags{
+     margin-left: 88px;
+     color: red;
+   }
+ }
+
+ .textarea {
+   width: 500px;
+   height: 250px;
+ }
+
+ .input {
+   width: 500px;
+   height: 50px;
+ }

@@ -21,11 +21,13 @@ import { environment } from 'src/environments/environment';
 import { HomeComponent } from './pages/home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { UserNamePipe } from './core/pipes/user-name.pipe';
+import { QuastionsComponent } from './core/components/quastions/quastions.component';
+import { CreateQuestionComponent } from './pages/createquastion/createquastion.component';
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
-    AuthFormComponent, HomeComponent, UserNamePipe
+    AuthFormComponent, HomeComponent, UserNamePipe, QuastionsComponent, CreateQuestionComponent
   ],
   imports: [
     BrowserModule,

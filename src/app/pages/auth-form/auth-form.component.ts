@@ -1,6 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 import { PATHS } from 'src/app/core/models';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -65,14 +67,23 @@ export class AuthFormComponent implements OnInit {
     this.handler(this.authService.loginWithFacebook());
   }
 
-  handler(promise: Promise<boolean>){
-    promise.then((res) => {
-      if (res) {
-        this.router.navigate(['']);
-      }
-    })
-    .catch((err) => {
-      this.error = err.message;
-    });
+  handler(promise: Promise<boolean> | Observable<boolean>){
+    if (promise instanceof Promise) {
+      promise.then((res) => {
+        if (res) {
+          this.router.navigate(['']);
+        }
+      })
+      .catch((err) => {
+        this.error = err.message;
+      });
+    } else {
+      promise.subscribe((res) => {
+        if (res) {
+          this.router.navigate(['']);
+        }
+      }, err => this.error = err.message)
+    }
+    
   }
 }
