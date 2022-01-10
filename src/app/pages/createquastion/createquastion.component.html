@@ -1,8 +1,8 @@
 <div class="createquastion">  
       <form class="form" [formGroup]="formGroup" (ngSubmit)="submit()">
         <h2 class="createquastion_title">New Question</h2>
-        <!-- <div class="question__item" *ngIf="error">
-          <p class="question__error">{{ error }}</p>
+        <!-- <div class="" *ngIf="error">
+          <p class="">{{ error }}</p>
         </div> -->
         <div class="createquastion_item">
           <label for="title" class="question__form-title">Title</label>
@@ -40,7 +40,7 @@
           <p>Tags</p>
           <div class="createquastion_tags">
             <div *ngFor="let tag of TAGS" class="form-check">
-                <input class="form-check-input" type="radio"  formControlName="tag" [id]="tag" [value]="tag" required>
+                <input  (click)="addTag($event)" class="form-check-input" type="checkbox"   [id]="tag" [value]="tag" required>
                 <label class="form-check-label" [for]="tag">
                     {{tag}}
                 </label>
@@ -52,8 +52,8 @@
         </div>
   
         <div class="createquastion_button">
-          <button type="submit" [disabled]="!formGroup.valid" class="btn btn-primary">Ok</button>
-          <button type="button" class="btn btn-danger">Cancel</button>
+          <button  type="submit" [disabled]="!formGroup.valid" class="btn btn-primary">Ok</button>
+          <button routerLink="" type="button" class="btn btn-danger">Cancel</button>
         </div>
   
       </form>

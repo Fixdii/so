@@ -1,15 +1,16 @@
+import { UIComment, StoreObject } from "."
 
-export type BDQuestion = {
+export type DBQuestion = {
     dateOfCreation: number;
-    tag: string;
+    tag: string[];
     text: string;
     title: string;
     approved: boolean;
+    author: string;
+    comments: StoreObject<UIComment>;
 }
 
-
-export type UIQuestion = BDQuestion & {
+export type UIQuestion = Omit<DBQuestion, 'comments'> & {
     id: string;
-}
-
-  
+    comments: UIComment[];
+}  

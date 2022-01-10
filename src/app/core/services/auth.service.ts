@@ -5,9 +5,9 @@ import {
   AngularFirestoreDocument,
 } from '@angular/fire/compat/firestore';
 import firebase from 'firebase/compat/app';
-import { from, Observable, of, zip } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { UserData, UserRole } from '../models/user.entity';
-import { concatMap, debounceTime, map, mergeMap, switchMap, take } from 'rxjs/operators';
+import { concatMap, map, mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
@@ -21,9 +21,6 @@ export class AuthService {
   get userData() {
     return this.afAuth.authState.pipe(
       concatMap(user => {
-        // console.log(user);
-        console.log(user.email);
-        // return user;
         return this.getUserData(user)
       }),
     );
@@ -33,7 +30,6 @@ export class AuthService {
     return this.user
       .pipe(
         map((user) => {
-          console.log(true);
           return Boolean(user);
         })
       );
@@ -131,24 +127,11 @@ export class AuthService {
 
     const userRef: AngularFirestoreDocument<UserData> = this.afs.doc(
       `users/${user.uid}`
-    );
+    );    
 
-    // const userData: UserData = {
-    //   uid: user.uid,
-    //   email: user.email || '',
-    //   displayName: user.displayName || 'Anonymous',
-    //   photoURL:
-    //     user.photoURL ||
-    //     'https://material.angular.io/assets/img/examples/shiba1.jpg',
-    //   emailVerified: user.emailVerified,
-    //   deleted: false,
-    //   role: UserRole.User,
-    // };
     return userRef
       .get().pipe(
         map(results => {
-
-          console.log(results);
           return results.data();
         })
       )

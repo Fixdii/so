@@ -23,11 +23,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { UserNamePipe } from './core/pipes/user-name.pipe';
 import { QuastionsComponent } from './core/components/quastions/quastions.component';
 import { CreateQuestionComponent } from './pages/createquastion/createquastion.component';
+import { QuastionComponent } from './pages/quastion/quastion.component';
 @NgModule({
   declarations: [
     AppComponent,
     ToolbarComponent,
-    AuthFormComponent, HomeComponent, UserNamePipe, QuastionsComponent, CreateQuestionComponent
+    AuthFormComponent, HomeComponent, UserNamePipe, QuastionsComponent, CreateQuestionComponent, QuastionComponent
   ],
   imports: [
     BrowserModule,

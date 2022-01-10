@@ -1,0 +1,55 @@
+<div class="post" *ngIf = "quastion">
+  <div class="post_wrapper">
+    <a class="post_back" routerLink="/">
+      Back
+    </a>
+    <div class="post_header">
+      <p class="post_author">{{ quastion.author }}</p>
+      <p class="post_date">{{ quastion.dateOfCreation | date:"yyyy-MM-dd HH:mm:ss" }}</p>
+    </div>
+    <div class="post_info">
+      <div class="post_title">
+        <h2 class="comments_title">{{ quastion.title }}</h2>
+      </div>
+    </div>
+    <p class="post_text">
+      {{ quastion.text }}
+    </p>
+    <ul class="post_tags">
+      <li class="post_tag" *ngFor="let tag of quastion.tag">{{ tag }}</li>
+    </ul>
+    <div class="comments">
+      <div class="comments_wrapper">
+        <h3 class="comments_title">Add Answer</h3>
+        <form class="form" [formGroup]="formGroup" (ngSubmit)="submit()">
+          <textarea
+            class="form_textarea"
+            placeholder="Type coment..."
+            formControlName="text"
+          ></textarea>
+          <div class="form_btn">
+            <button type="submit" [disabled]="!formGroup.valid" class="btn btn-primary">Add answer</button>
+          </div>
+        </form>
+      </div>
+      <div class="comments_wrapper">
+          <h3 class="comments_title">Coments/Answers</h3>
+          <ul *ngIf="quastion.comments">
+            <li class="comments_answer" *ngFor="let comment of quastion.comments">
+              <div class="comments_info">
+                <div class="comments_main">
+                  <div class="comments_header">
+                    <p class="comments_username">{{ comment.author }}</p>
+                    <p class="comments_date">{{ comment.date | date: 'MMM d, y hh:mm' }}</p>
+                  </div>
+                  <p class="comments_text">
+                    {{ comment.text }}
+                  </p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+    </div>
+  </div>
+</div>

@@ -1,23 +1,50 @@
+p{
+  margin: 0;
+  padding: 0;
+}
+
 .example-card {
-    max-width: 400px;
-  //   margin: 10px 20px ;
-  }
-  
-  .quastionCard {
+  max-width: 400px;
+  width: 400px;
+  height: 250px; 
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.quastionCard {
+  &_info{
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 20px;
-    gap: 30px 70px;
+    justify-content: space-between;
   }
-      
-  .quastionCard_row{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: solid;
+
+  &_tags {
+    list-style-type: none;
+    display: flex;
+    margin: 0;
+    padding: 0;
   }
-  
-  .card_button{
-      text-align: center;
-  }
+}
+
+.tag {
+  padding-left: 5px;
+}
+
+.quastionCard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 30px 70px;
+}
+
+.quastionCard_row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: solid;
+}
+
+.card_button {
+  text-align: center;
+}
