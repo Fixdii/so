@@ -3,7 +3,6 @@
     margin: 0 auto;
     padding-top: 50px;
     width: 70%;
-    // height: 100%;
     padding-bottom: 50px;
   }
 
@@ -35,6 +34,20 @@
     border-radius: 16px;
     text-align: center;
   }
+
+  &_text{
+    word-wrap: break-word;
+  }
+
+  &_title{
+    word-wrap: break-word;
+  }
+
+  &_buttons{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 }
 
 .comments {
@@ -47,6 +60,10 @@
     font-size: 25px;
   }
 
+  &_text{
+    width: 80%;
+  }
+
   &_header {
     display: flex;
     justify-content: space-between;
@@ -55,13 +72,23 @@
     letter-spacing: 0.8px;
   }
 
+  &_buttons{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
   &_answer {
     border-top: 1px solid #C4C4C4;
-    padding-top: 20px;
 
     &:last-child {
       border-bottom: 1px solid #C4C4C4;
     }
+  }
+
+  &_info{
+    padding: 10px;
   }
 }
 
@@ -84,4 +111,19 @@ ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+button{
+  margin-right: 20px;
+  &:last-child{
+    margin: 0;
+  }
+}
+
+.resolve{
+  background: #5bd51196;
+}
+
+.noResolve{
+  background: #fff;
 }

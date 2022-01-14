@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { DBQuestion, UIQuestion, UserRole } from '../../models';
 import { AuthService } from '../../services/auth.service';
 import { QuastionsService } from '../../services/quastions.service';
@@ -8,7 +8,10 @@ import { QuastionsService } from '../../services/quastions.service';
   templateUrl: './quastions.component.html',
   styleUrls: ['./quastions.component.scss'],
 })
-export class QuastionsComponent implements OnInit {
+export class QuastionsComponent implements OnInit {  
+  @Input() toggle: boolean = false;
+
+
   ROLES = UserRole;
   quastions: UIQuestion[];
 
@@ -19,8 +22,14 @@ export class QuastionsComponent implements OnInit {
     private quastionsService: QuastionsService,
     private authService: AuthService
   ) {
-    this.quastionsService.getQuastions().subscribe((data) => {
-      this.quastions = data;
+    this.getQuastions;   
+  }
+
+  get getQuastions() {
+    return this.quastionsService.getQuastions().subscribe((data) => {
+      if(data){
+        this.quastions = data;      
+      }
     });
   }
 
@@ -29,16 +38,20 @@ export class QuastionsComponent implements OnInit {
   approveQuestion(key: string) {
     this.quastionsService
       .approveQuestion(key)
-      .subscribe((res) => console.log(res));
+      .subscribe((res) => {
+        if(res){
+          this.getQuastions;
+        }
+      });
   }
 
-  // создать функцию 
-
   deleteQuestion(key: string) {
-    this.quastionsService.deleteQuestion(key).subscribe((res) =>
-      this.quastionsService.getQuastions().subscribe((data) => {
-        this.quastions = data;
-      })
-    );
+    this.quastionsService
+    .deleteQuestion(key)
+    .subscribe((res) => {
+      if(res){
+        this.getQuastions;
+      }
+    });   
   }
 }

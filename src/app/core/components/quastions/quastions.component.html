@@ -1,21 +1,22 @@
-<div class="quastionCard">
-  <div *ngFor="let question of quastions">
-    <mat-card *ngIf="((userData | async)?.role === ROLES.Admin) || question.approved || (user | async)?.email === question.author" class="example-card">
-      <mat-card-title>{{question.title}}</mat-card-title>
-      <mat-card-subtitle>{{question.author}}</mat-card-subtitle>
-      <mat-card-content>
-        <div class="quastionCard_info">
-          <p>{{question.dateOfCreation | date:"yyyy-MM-dd HH:mm:ss"}}</p>
-          <ul class="quastionCard_tags">
-            <li class="tag" *ngFor="let tag of question.tag">{{tag}}</li>
-          </ul>
-        </div>
-      </mat-card-content>
-      <mat-card-actions class="card_button">
-        <button mat-raised-button color="primary" routerLink="/quastion/{{question.id}}">view</button>
-        <button *ngIf="(userData | async)?.role === ROLES.Admin" mat-raised-button color="accent" (click)="approveQuestion(question.id)">approve</button>
-        <button *ngIf="(userData | async)?.role === ROLES.Admin" mat-raised-button color="warn" (click)="deleteQuestion(question.id)">delete</button>
-      </mat-card-actions>
-    </mat-card>  
-  </div>  
-</div>
+<ng-container *ngFor="let question of quastions">
+  <div *ngIf="((userData | async)?.role === ROLES.Admin) || question.approved || (user | async)?.email === question.author" [ngClass]="{quastionCard_row: toggle, quastionCard: !toggle}">
+      <mat-card  [ngClass]="{exampleCard_row: toggle, exampleCard: !toggle}">
+        <p *ngIf="!question.approved && !((userData | async)?.role === ROLES.Admin)" class="card_check">on check</p>
+        <mat-card-title class= "card_title">{{question.title}}</mat-card-title>
+        <mat-card-subtitle>{{question.author}}</mat-card-subtitle>
+        <mat-card-content>
+          <div class="quastionCard_info">
+            <p>{{question.dateOfCreation | date:"yyyy-MM-dd HH:mm:ss"}}</p>
+            <ul class="quastionCard_tags">
+              <li class="quastionCard_tag" *ngFor="let tag of question.tag">{{tag}}</li>
+            </ul>
+          </div>
+        </mat-card-content>
+        <mat-card-actions [ngClass]="{'card_button-row': toggle}"  class="card_button">
+          <button mat-raised-button color="primary" routerLink="/quastion/{{question.id}}">view</button>
+          <button mat-raised-button color="accent" *ngIf="(userData | async)?.role === ROLES.Admin && !question.approved" (click)="approveQuestion(question.id)">approve</button>
+          <button mat-raised-button color="warn" *ngIf="(userData | async)?.role === ROLES.Admin || (user | async)?.email === question.author" (click)="deleteQuestion(question.id)">delete</button>
+        </mat-card-actions>
+      </mat-card>  
+  </div>
+</ng-container>

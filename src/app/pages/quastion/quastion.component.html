@@ -1,11 +1,11 @@
-<div class="post" *ngIf = "quastion">
+<div class="post" *ngIf="quastion">
   <div class="post_wrapper">
-    <a class="post_back" routerLink="/">
-      Back
-    </a>
+    <a class="post_back" routerLink="/"> Back </a>
     <div class="post_header">
       <p class="post_author">{{ quastion.author }}</p>
-      <p class="post_date">{{ quastion.dateOfCreation | date:"yyyy-MM-dd HH:mm:ss" }}</p>
+      <p class="post_date">
+        {{ quastion.dateOfCreation | date: "yyyy-MM-dd HH:mm:ss" }}
+      </p>
     </div>
     <div class="post_info">
       <div class="post_title">
@@ -15,9 +15,45 @@
     <p class="post_text">
       {{ quastion.text }}
     </p>
-    <ul class="post_tags">
-      <li class="post_tag" *ngFor="let tag of quastion.tag">{{ tag }}</li>
-    </ul>
+    <div class="post_buttons">
+      <ul class="post_tags">
+        <li class="post_tag" *ngFor="let tag of quastion.tag">{{ tag }}</li>
+      </ul>
+      <div>
+        <button
+          mat-raised-button
+          color="primary"
+          class="post__btn-approve"
+          type="button"
+          *ngIf="(userData | async)?.role === ROLES.Admin && !quastion.approved"
+          (click)="approveQuestion(quastion.id)"
+        >
+          Approve
+        </button>
+        <button
+          mat-raised-button
+          color="accent"
+          class="post_edit"
+          *ngIf="user?.email === quastion.author && !quastion.approved"
+          [routerLink]="['/editquastion', quastion.id]"
+        >
+          Edit question
+        </button>
+        <button
+          mat-raised-button
+          color="warn"
+          class="post_btn-delete"
+          type="button"
+          (click)="deleteQuestion(quastion.id)"
+          *ngIf="
+            (userData | async)?.role === ROLES.Admin ||
+            user?.email === quastion.author
+          "
+        >
+          Delete
+        </button>
+      </div>
+    </div>
     <div class="comments">
       <div class="comments_wrapper">
         <h3 class="comments_title">Add Answer</h3>
@@ -28,28 +64,70 @@
             formControlName="text"
           ></textarea>
           <div class="form_btn">
-            <button type="submit" [disabled]="!formGroup.valid" class="btn btn-primary">Add answer</button>
+            <button
+              type="submit"
+              [disabled]="!formGroup.valid"
+              class="btn btn-primary"
+            >
+              Add answer
+            </button>
           </div>
         </form>
       </div>
       <div class="comments_wrapper">
-          <h3 class="comments_title">Coments/Answers</h3>
-          <ul *ngIf="quastion.comments">
-            <li class="comments_answer" *ngFor="let comment of quastion.comments">
-              <div class="comments_info">
-                <div class="comments_main">
-                  <div class="comments_header">
-                    <p class="comments_username">{{ comment.author }}</p>
-                    <p class="comments_date">{{ comment.date | date: 'MMM d, y hh:mm' }}</p>
-                  </div>
+        <h3 class="comments_title">Coments/Answers</h3>
+        <ul *ngIf="quastion.comments">
+          <li class="comments_answer" *ngFor="let comment of quastion.comments">
+            <div
+              [ngClass]="{ resolve: comment?.isResolved }"
+              class="comments_info"
+            >
+              <div class="comments_main">
+                <div class="comments_header">
+                  <p class="comments_username">{{ comment.author }}</p>
+                  <p class="comments_date">
+                    {{ comment.date | date: "MMM d, y hh:mm" }}
+                  </p>
+                </div>
+                <div class="comments_buttons">
                   <p class="comments_text">
                     {{ comment.text }}
                   </p>
+                  <div>
+                    <button
+                      mat-raised-button
+                      color="warn"
+                      class="comments_delete"
+                      *ngIf="
+                        (userData | async)?.role === ROLES.Admin ||
+                        user?.email === quastion.author ||
+                        user?.email === comment.author
+                      "
+                      (click)="deleteComment(quastion.id, comment.commentKey)"
+                    >
+                      Delete
+                    </button>
+                    <input
+                      *ngIf="user?.email === quastion.author"
+                      id="{{ comment.id }}"
+                      type="checkbox"
+                      class="checkbox"
+                      (click)="resolve($event, quastion.id, comment.commentKey)"
+                      [checked]="comment?.isResolved"
+                    />
+                    <span
+                      *ngIf="user?.email === quastion.author"
+                      class="comments_checkbox"
+                    >
+                      Resolve
+                    </span>
+                  </div>
                 </div>
               </div>
-            </li>
-          </ul>
-        </div>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>

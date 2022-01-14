@@ -1,0 +1,105 @@
+.circle {
+    position: fixed;
+    bottom: 1%;
+    right: 1%;
+    border-radius: 50%;
+    width: 56px;
+    height: 50px;
+    background-color: #3f51b5;
+  }
+  .circle::after {
+    content: " ";
+    position: absolute;
+    display: block;
+    background-color: #fff;
+    height: 3px;
+    margin-top: -2px;
+    top: 50%;
+    left: 4px;
+    right: 4px;
+    z-index: 9;
+  }
+  .circle::before {
+    content: " ";
+    position: absolute;
+    display: block;
+    background-color: #fff;
+    width: 3px;
+    margin-left: -2px;
+    left: 50%;
+    top: 4px;
+    bottom: 4px;
+    z-index: 9;
+  }
+
+  .square {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background-color: #000000;
+  }
+  .square::after {
+    content: " ";
+    position: absolute;
+    display: block;
+    background-color: #fff;
+    height: 2px;
+    margin-top: -1px;
+    top: 50%;
+    left: 0px;
+    right: 0px;
+    z-index: 9;
+  }
+  .square::before {
+    content: " ";
+    position: absolute;
+    display: block;
+    background-color: #fff;
+    width: 2px;
+    margin-left: -1px;
+    left: 50%;
+    top: 0px;
+    bottom: 0px;
+    z-index: 9;
+  }
+  
+
+  .filter{
+    width: 100%;
+    height: 50px;
+    text-align: center;
+    color: rgb(12, 12, 12);
+  }
+
+  .quastionCard{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    grid-gap: 30px 70px;
+    gap: 30px 70px;
+  }
+
+//   .container {
+//     display: inline-block;
+//     cursor: pointer;
+// }
+
+// .bar1, .bar2, .bar3 {
+//     width: 35px;
+//     height: 5px;
+//     background-color: #333;
+//     margin: 6px 0;
+//     transition: 0.4s;
+// }
+
+// .change .bar1 {
+//     -webkit-transform: rotate(-45deg) translate(-9px, 6px);
+//     transform: rotate(-45deg) translate(-9px, 6px);
+// }
+
+// .change .bar2 {opacity: 0;}
+
+// .change .bar3 {
+//     -webkit-transform: rotate(45deg) translate(-8px, -8px);
+//     transform: rotate(45deg) translate(-8px, -8px);
+// }

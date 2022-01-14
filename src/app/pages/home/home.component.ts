@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
+  toggle = false;
+
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  toggleDisplay(){
+    this.toggle =  !this.toggle;
   }
 
 }
