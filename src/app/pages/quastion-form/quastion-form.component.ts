@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { switchMap, takeUntil } from 'rxjs/operators';
 import { DBQuestion, TAGS } from 'src/app/core/models';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { QuastionsService } from 'src/app/core/services/quastions.service';
@@ -11,7 +12,7 @@ import { QuastionsService } from 'src/app/core/services/quastions.service';
   templateUrl: './quastion-form.component.html',
   styleUrls: ['./quastion-form.component.scss'],
 })
-export class QuastionForm implements OnInit {
+export class QuastionForm implements OnInit, OnDestroy{
   TAGS = TAGS;
   formGroup: FormGroup;
   email: string;
@@ -21,6 +22,8 @@ export class QuastionForm implements OnInit {
   quastionText: string;
   quastionTitle: string;
   quastionTags: string[] = [];
+  private destroy = new Subject<void>();
+
 
   constructor(
     private fb: FormBuilder,
@@ -36,7 +39,8 @@ export class QuastionForm implements OnInit {
   }
 
   get getInfoQuastion() {
-    return this.quastionsService.getQuastions().subscribe((data) => {
+    return this.quastionsService.getQuastions()
+    .pipe(takeUntil(this.destroy)).subscribe((data) => {
       data.forEach((quastion) => {
         if (this.id === quastion.id) {
           this.quastionTitle = quastion.title;
@@ -58,6 +62,7 @@ export class QuastionForm implements OnInit {
     if (this.isEdit) {
       this.activateRoute.paramMap
         .pipe(switchMap((params) => params.getAll('id')))
+        .pipe(takeUntil(this.destroy))
         .subscribe((data) => (this.id = data));
     }
 
@@ -75,13 +80,13 @@ export class QuastionForm implements OnInit {
     };
 
     if (this.isEdit) {
-      this.quastionsService.editQuestion(this.id, question).subscribe((res) => {
+      this.quastionsService.editQuestion(this.id, question).pipe(takeUntil(this.destroy)).subscribe((res) => {
         if (res) {
           this.router.navigate([`/quastion/${this.id}`]);
         }
       });
     } else {
-      this.quastionsService.sendQuastion(question).subscribe((res) => {
+      this.quastionsService.sendQuastion(question).pipe(takeUntil(this.destroy)).subscribe((res) => {
         if (res) {
           this.router.navigate(['']);
         }
@@ -107,5 +112,10 @@ export class QuastionForm implements OnInit {
     }
 
     this.formGroup.patchValue({ tag: this.tags });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 }

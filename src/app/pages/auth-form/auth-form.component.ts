@@ -1,8 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { catchError, takeUntil } from 'rxjs/operators';
 import { PATHS } from 'src/app/core/models';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -11,11 +11,11 @@ import { AuthService } from '../../core/services/auth.service';
   templateUrl: './auth-form.component.html',
   styleUrls: ['./auth-form.component.scss'],
 })
-export class AuthFormComponent implements OnInit {
+export class AuthFormComponent implements OnInit, OnDestroy {
   error = '';
   activeRoute: string;
   isSignUp = false;
-
+  private destroy = new Subject<void>();
   formGroup: FormGroup;
 
   constructor(
@@ -24,7 +24,7 @@ export class AuthFormComponent implements OnInit {
     private router: Router,
     private activateRoute: ActivatedRoute
   ) {
-    this.activeRoute = this.activateRoute.snapshot.routeConfig.path
+    this.activeRoute = this.activateRoute.snapshot.routeConfig.path;
   }
 
   ngOnInit(): void {
@@ -34,7 +34,9 @@ export class AuthFormComponent implements OnInit {
         '',
         [
           Validators.required,
-          Validators.pattern('^[[A-Za-z0-9./()^_%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'),
+          Validators.pattern(
+            '^[[A-Za-z0-9./()^_%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$'
+          ),
         ],
       ],
       password: [
@@ -67,23 +69,31 @@ export class AuthFormComponent implements OnInit {
     this.handler(this.authService.loginWithFacebook());
   }
 
-  handler(promise: Promise<boolean> | Observable<boolean>){
+  handler(promise: Promise<boolean> | Observable<boolean>) {
     if (promise instanceof Promise) {
-      promise.then((res) => {
-        if (res) {
-          this.router.navigate(['']);
-        }
-      })
-      .catch((err) => {
-        this.error = err.message;
-      });
+      promise
+        .then((res) => {
+          if (res) {
+            this.router.navigate(['']);
+          }
+        })
+        .catch((err) => {
+          this.error = err.message;
+        });
     } else {
-      promise.subscribe((res) => {
-        if (res) {
-          this.router.navigate(['']);
-        }
-      }, err => this.error = err.message)
+      promise.pipe(takeUntil(this.destroy)).subscribe(
+        (res) => {
+          if (res) {
+            this.router.navigate(['']);
+          }
+        },
+        (err) => (this.error = err.message)
+      );
     }
-    
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 }

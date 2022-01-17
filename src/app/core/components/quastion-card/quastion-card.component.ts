@@ -1,5 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { DBQuestion, UIQuestion, UserRole } from '../../models';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { UIQuestion, UserRole } from '../../models';
 import { AuthService } from '../../services/auth.service';
 import { QuastionsService } from '../../services/quastions.service';
 
@@ -8,14 +10,13 @@ import { QuastionsService } from '../../services/quastions.service';
   templateUrl: './quastion-card.component.html',
   styleUrls: ['./quastion-card.component.scss'],
 })
-
-export class QuastionCardComponent implements OnInit {  
+export class QuastionCardComponent implements OnInit, OnDestroy {
   @Input() toggle: boolean = false;
   @Input() post: UIQuestion;
 
-
   ROLES = UserRole;
   quastions: UIQuestion[];
+  private destroy = new Subject<void>();
 
   userData = this.authService.userData;
   user = this.authService.user;
@@ -24,15 +25,18 @@ export class QuastionCardComponent implements OnInit {
     private quastionsService: QuastionsService,
     private authService: AuthService
   ) {
-    this.getQuastions;   
+    this.getQuastions;
   }
 
   get getQuastions() {
-    return this.quastionsService.getQuastions().subscribe((data) => {
-      if(data){
-        this.quastions = data;      
-      }
-    });
+    return this.quastionsService
+      .getQuastions()
+      .pipe(takeUntil(this.destroy))
+      .subscribe((data) => {
+        if (data) {
+          this.quastions = data;
+        }
+      });
   }
 
   ngOnInit(): void {}
@@ -40,8 +44,9 @@ export class QuastionCardComponent implements OnInit {
   approveQuestion(key: string) {
     this.quastionsService
       .approveQuestion(key)
+      .pipe(takeUntil(this.destroy))
       .subscribe((res) => {
-        if(res){
+        if (res) {
           this.getQuastions;
         }
       });
@@ -49,11 +54,17 @@ export class QuastionCardComponent implements OnInit {
 
   deleteQuestion(key: string) {
     this.quastionsService
-    .deleteQuestion(key)
-    .subscribe((res) => {
-      if(res){
-        this.getQuastions;
-      }
-    });   
+      .deleteQuestion(key)
+      .pipe(takeUntil(this.destroy))
+      .subscribe((res) => {
+        if (res) {
+          this.getQuastions;
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 }

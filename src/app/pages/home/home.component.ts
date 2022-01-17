@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { TAGS, UIQuestion } from 'src/app/core/models';
 import { QuastionsService } from 'src/app/core/services/quastions.service';
 
@@ -8,7 +10,7 @@ import { QuastionsService } from 'src/app/core/services/quastions.service';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
   quastions: UIQuestion[];
   TAGS = TAGS;
   toggle = false;
@@ -17,17 +19,17 @@ export class HomeComponent implements OnInit {
   tags = new FormControl();
   isAnswer = new FormControl();
   sortDay = new FormControl();
+  private destroy = new Subject<void>();
+
 
   constructor(private quastionsService: QuastionsService) {
     this.getQuastions;
   }
-
+ 
   ngOnInit(): void {}
 
   toggleDisplay() {
-    this.toggle = !this.toggle;
-    console.log(this.sortDay.value);
-    
+    this.toggle = !this.toggle;        
   }
 
   toggleMyQuestion() {
@@ -35,10 +37,15 @@ export class HomeComponent implements OnInit {
   }
 
   get getQuastions() {
-    return this.quastionsService.getQuastions().subscribe((data) => {
+    return this.quastionsService.getQuastions().pipe(takeUntil(this.destroy)).subscribe((data) => {
       if (data) {
         this.quastions = data;
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy.next();
+    this.destroy.complete();
   }
 }
