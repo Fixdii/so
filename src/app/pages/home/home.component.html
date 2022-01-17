@@ -1,12 +1,70 @@
+<mat-checkbox style="margin: 4px;" (click)="toggleMyQuestion()" >Only my questions</mat-checkbox>
 <div class="filter">
-    <a href="#" style="font-size: 20px;" (click)="toggleDisplay()">toggleDisplay</a>
+  
+  <div>
+    <mat-form-field appearance="fill">
+      <mat-label>Is answered</mat-label>
+      <mat-select [formControl]="isAnswer">
+        <mat-option>
+          All
+        </mat-option>
+        <mat-option  value="true">
+          Is answered
+        </mat-option>
+        <mat-option  value="false">
+          Is not answered
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  
+    <mat-form-field appearance="fill">
+      <mat-label>Tags</mat-label>
+      <mat-select [formControl]="tags" multiple>
+        <mat-option *ngFor="let tag of TAGS" [value]="tag">{{tag}}</mat-option>
+      </mat-select>
+    </mat-form-field> 
 
-    <!-- <a href="#" class="square" (click)="toggleDisplay()"></a> -->
-    <!-- <div class="container"  (click)="toggleDisplay()">
-        <div class="bar1"></div>
-        <div class="bar2"></div>
-        <div class="bar3"></div>
-      </div> -->
+    <mat-form-field appearance="fill">
+      <mat-label>In a period</mat-label>
+      <mat-select [formControl]="sortDay">
+        <mat-option [value]="0">
+          None
+        </mat-option>
+        <mat-option [value]="1">
+          Оne day ago
+        </mat-option>
+        <mat-option [value]="7">
+          Оne week ago
+        </mat-option>
+        <mat-option [value]="30">
+          One month ago
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="filter_date">
+    <button mat-raised-button (click)="isSort = !isSort">
+      <mat-icon>swap_vert</mat-icon>
+      sort
+    </button>
+    <a class="toggleDisplay" style="font-size: 20px;" (click)="toggleDisplay()">
+      <mat-icon *ngIf="!toggle">reorder</mat-icon>
+      <mat-icon *ngIf="toggle">view_module</mat-icon>
+    </a>
+  </div>
+
 </div>
-<app-quastions [toggle]="toggle" [ngClass]="{quastionCard: !toggle}"></app-quastions>
+
+<!-- Посмотреть toggle style -->
+<div [ngClass]="{'quastionsCards_row': toggle, 'quastionsCards': !toggle}">
+  <app-quastion-card 
+    *ngFor="let question of (quastions | myQuestions: isMyQuestion | dateSort: isSort | tagSort: tags.value | answerSort: isAnswer.value | sortByDay: +sortDay.value)" 
+    [post] = question 
+    [toggle]="toggle" 
+    [ngClass]="{quastionCard: !toggle}">
+</app-quastion-card>
+</div>
+
+
 <a href="/createquastion" class="circle"></a>

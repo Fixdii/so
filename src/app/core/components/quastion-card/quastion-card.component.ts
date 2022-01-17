@@ -4,12 +4,14 @@ import { AuthService } from '../../services/auth.service';
 import { QuastionsService } from '../../services/quastions.service';
 
 @Component({
-  selector: 'app-quastions',
-  templateUrl: './quastions.component.html',
-  styleUrls: ['./quastions.component.scss'],
+  selector: 'app-quastion-card',
+  templateUrl: './quastion-card.component.html',
+  styleUrls: ['./quastion-card.component.scss'],
 })
-export class QuastionsComponent implements OnInit {  
+
+export class QuastionCardComponent implements OnInit {  
   @Input() toggle: boolean = false;
+  @Input() post: UIQuestion;
 
 
   ROLES = UserRole;

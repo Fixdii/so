@@ -15,7 +15,8 @@
     <p>{{ user.email ? user.email : "User" }}</p>
     <div class="example-button-container" style="margin-left: 10px;">
       <button mat-mini-fab [matMenuTriggerFor]="menu" color="primary" aria-label="Example icon button with a menu icon">
-        <mat-icon>menu</mat-icon>
+        <!-- <mat-icon>menu</mat-icon> -->
+        <mat-icon>more_vert</mat-icon>
       </button>
     </div>
     <mat-menu #menu="matMenu">
