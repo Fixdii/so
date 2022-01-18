@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { UIQuestion, UserRole } from '../../models';
 import { AuthService } from '../../services/auth.service';
 import { QuastionsService } from '../../services/quastions.service';
@@ -13,6 +13,7 @@ import { QuastionsService } from '../../services/quastions.service';
 export class QuastionCardComponent implements OnInit, OnDestroy {
   @Input() toggle: boolean = false;
   @Input() post: UIQuestion;
+  @Output() onChanged = new EventEmitter< UIQuestion[]>();
 
   ROLES = UserRole;
   quastions: UIQuestion[];
@@ -24,30 +25,17 @@ export class QuastionCardComponent implements OnInit, OnDestroy {
   constructor(
     private quastionsService: QuastionsService,
     private authService: AuthService
-  ) {
-    this.getQuastions;
-  }
-
-  get getQuastions() {
-    return this.quastionsService
-      .getQuastions()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((data) => {
-        if (data) {
-          this.quastions = data;
-        }
-      });
-  }
+  ) { }
 
   ngOnInit(): void {}
 
   approveQuestion(key: string) {
     this.quastionsService
       .approveQuestion(key)
-      .pipe(takeUntil(this.destroy))
+      .pipe(take(1))
       .subscribe((res) => {
         if (res) {
-          this.getQuastions;
+          this.onChanged.emit([]);  
         }
       });
   }
@@ -55,10 +43,10 @@ export class QuastionCardComponent implements OnInit, OnDestroy {
   deleteQuestion(key: string) {
     this.quastionsService
       .deleteQuestion(key)
-      .pipe(takeUntil(this.destroy))
+      .pipe(take(1))
       .subscribe((res) => {
         if (res) {
-          this.getQuastions;
+          this.onChanged.emit([]);                      
         }
       });
   }

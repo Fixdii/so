@@ -2,9 +2,10 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { catchError, takeUntil } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 import { PATHS } from 'src/app/core/models';
 import { AuthService } from '../../core/services/auth.service';
+import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-auth-form',
@@ -29,6 +30,7 @@ export class AuthFormComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isSignUp = this.activeRoute === PATHS.SIGN_UP;
+
     this.formGroup = this.fb.group({
       email: [
         '',

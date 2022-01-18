@@ -47,7 +47,7 @@ import { SortByDayPipe } from './core/pipes/sort-by-day.pipe';
     MyQuestionsPipe,
     TagSortPipe,
     AnswerSortPipe,
-    SortByDayPipe
+    SortByDayPipe,
   ],
   imports: [
     BrowserModule,

@@ -59,6 +59,7 @@
 <!-- Посмотреть toggle style -->
 <div [ngClass]="{'quastionsCards_row': toggle, 'quastionsCards': !toggle}">
   <app-quastion-card 
+    (onChanged)="updateQuastion($event)"
     *ngFor="let question of (quastions | myQuestions: isMyQuestion | tagSort: tags.value | answerSort: isAnswer.value | sortByDay: +sortDay.value | dateSort: isSort)" 
     [post] = question 
     [toggle]="toggle" 

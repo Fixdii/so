@@ -10,7 +10,9 @@ export class MyQuestionsPipe implements PipeTransform {
 
   constructor(private authService: AuthService) {
     this.authService.user.subscribe((res) => {
-      this.email = res.email;
+      if(res){
+        this.email = res.email;
+      }
     });
   }
 

@@ -6,7 +6,6 @@ import { AuthService } from '../services/auth.service';
   name: 'dateSort'
 })
 export class DateSortPipe implements PipeTransform {
-
   transform(quastions: UIQuestion[], option: boolean): UIQuestion[] {
     if(quastions){
       return quastions.sort((a: any, b: any) => {

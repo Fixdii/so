@@ -1,4 +1,4 @@
-  <div *ngIf="((userData | async)?.role === ROLES.Admin) || post.approved || (user | async)?.email === post.author" [ngClass]="{quastionCard_row: toggle, quastionCard: !toggle}">
+  <div [ngClass]="{quastionCard_row: toggle, quastionCard: !toggle}">
       <mat-card  [ngClass]="{exampleCard_row: toggle, exampleCard: !toggle}">
         <p *ngIf="!post.approved && !((userData | async)?.role === ROLES.Admin)" class="card_check">on check</p>
         <mat-card-title class= "card_title">{{post.title}}</mat-card-title>

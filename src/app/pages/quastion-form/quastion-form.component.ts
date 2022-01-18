@@ -67,7 +67,9 @@ export class QuastionForm implements OnInit, OnDestroy{
     }
 
     this.authService.user.subscribe((res) => {
-      this.email = res.email;
+      if(res) {
+        this.email = res.email;
+      }      
     });
   }
 
