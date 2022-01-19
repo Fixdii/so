@@ -2,10 +2,9 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { PATHS } from 'src/app/core/models';
 import { AuthService } from '../../core/services/auth.service';
-import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-auth-form',
@@ -65,13 +64,14 @@ export class AuthFormComponent implements OnInit, OnDestroy {
 
   loginGoogle() {
     this.handler(this.authService.loginWithGoogle());
+    // this.authService.loginWithGoogle();
   }
 
   loginFacebook() {
     this.handler(this.authService.loginWithFacebook());
   }
 
-  handler(promise: Promise<boolean> | Observable<boolean>) {
+  handler(promise: Promise<boolean> | Observable<boolean> ) {
     if (promise instanceof Promise) {
       promise
         .then((res) => {

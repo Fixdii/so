@@ -14,7 +14,6 @@ import { QuastionsService } from 'src/app/core/services/quastions.service';
 export class HomeComponent implements OnInit, OnDestroy {
   quastions: UIQuestion[];
   userData: UserData;
-  email: string;
   TAGS = TAGS;
   toggle = false;
   isMyQuestion = false;
@@ -32,13 +31,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getQuastions;
     this.authService.userData.subscribe((data) => {
-      this.userData = data;            
-      this.sortQuestions();
-    });
-    this.authService.user.subscribe((user) => {
-      if(user){
-        this.email = user.email; 
-      }           
+      this.userData = data;      
       this.sortQuestions();
     });
   }
@@ -64,21 +57,16 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   sortQuestions() {
-    if(!this.userData) {
-      this.quastions = this.quastions?.filter(post=>{
-        if(post.approved || this.email === post.author){
-          return true;            
-        }  
-        return false;
-      });     
-    }else{
-      this.quastions = this.quastions?.filter(post=>{
-        if(this.userData.role === UserRole.Admin || post.approved || this.email === post.author){
-          return true;            
-        }  
-        return false;
-      });
-    }  
+    if(!this.userData) {      
+      return;
+    }
+
+    this.quastions = this.quastions.filter(post=>{
+      if(this.userData.role === UserRole.Admin || post.approved || this.userData.email === post.author){
+        return true;            
+      }  
+      return false;
+    });
   }
 
   updateQuastion(quastions: UIQuestion[]) {

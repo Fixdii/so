@@ -81,14 +81,14 @@ export class AuthService {
   }
 
   setUserData(user: firebase.User | null) {
-    if (!user) {
+    if (!user) {      
       return from(this.signOut().then((r) => false));
     }
 
     const userRef: AngularFirestoreDocument<any> = this.afs.doc(
       `users/${user.uid}`
     );
-
+    
     const userData: UserData = {
       uid: user.uid,
       email: user.email || '',
@@ -98,22 +98,15 @@ export class AuthService {
         'https://material.angular.io/assets/img/examples/shiba1.jpg',
       emailVerified: user.emailVerified,
       deleted: false,
-      role: UserRole.User,
+      role: user.email === "walera2001@gmail.com" ? UserRole.Admin : UserRole.User,
     };
-    return this.getUserData(user).pipe(
-      concatMap(res => {
-        if (res !== null) {
-          return from(userRef
-            .set(userData, {
-              merge: true,
-            })
-            .then((r) => true));
-        } else {
-          return of(true);
-        }
+
+
+    return from(userRef
+      .set(userData, {
+        merge: true, 
       })
-    )
-     
+      .then((r) => true));  
   }
 
   signOut() {
