@@ -57,15 +57,15 @@
 </div>
 
 <!-- Посмотреть toggle style -->
-<div *ngIf="userData" [ngClass]="{'quastionsCards_row': toggle, 'quastionsCards': !toggle}">
-  <app-quastion-card 
-    (onChanged)="updateQuastion($event)"
-    *ngFor="let question of (quastions | myQuestions: isMyQuestion | tagSort: tags.value | answerSort: isAnswer.value | sortByDay: +sortDay.value | dateSort: isSort)" 
+<div *ngIf="userData" [ngClass]="{'questionsCards_row': toggle, 'questionsCards': !toggle}">
+  <app-question-card 
+    (onChanged)="updateQuestion()"
+    *ngFor="let question of (questions | myQuestions: isMyQuestion : userData | tagSort: tags.value | answerSort: isAnswer.value | sortByDay: +sortDay.value | dateSort: isSort)" 
     [post] = question 
     [toggle]="toggle" 
-    [ngClass]="{quastionCard: !toggle}">
-</app-quastion-card>
+    [ngClass]="{questionCard: !toggle}">
+</app-question-card>
 </div>
 
 
-<a href="/createquastion" class="circle"></a>
+<a href="/createquestion" class="circle"></a>

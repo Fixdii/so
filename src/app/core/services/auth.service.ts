@@ -14,11 +14,11 @@ import { concatMap, map, mergeMap } from 'rxjs/operators';
 })
 
 export class AuthService {
-  get user() {
+  get user(): Observable<firebase.User> {
     return this.afAuth.authState
   }
 
-  get userData() {
+  get userData(): Observable<UserData> {
     return this.afAuth.authState.pipe(
       concatMap(user => {
         return this.getUserData(user)
@@ -35,10 +35,12 @@ export class AuthService {
       );
   }
 
-  constructor(private afAuth: AngularFireAuth, public afs: AngularFirestore) {}
+  constructor(
+    private afAuth: AngularFireAuth,
+    public afs: AngularFirestore
+    ) {}
 
-
-  logIn(email: string, password: string) {
+  logIn(email: string, password: string): Observable<boolean> {
     return from(this.afAuth
         .signInWithEmailAndPassword(email, password)
       ).pipe(
@@ -48,7 +50,7 @@ export class AuthService {
       );
   }
 
-  signUp(email: string, password: string) {
+  signUp(email: string, password: string): Observable<boolean> {
     return from(this.afAuth
       .createUserWithEmailAndPassword(email, password)
     ).pipe(
@@ -58,21 +60,21 @@ export class AuthService {
     );
   }
 
-  loginWithGoogle() {
+  loginWithGoogle(): Promise<boolean> {
     const provider = new firebase.auth.GoogleAuthProvider();
     return this.authLogin(provider).then((result) => {
       return true;
     });
   }
 
-  loginWithFacebook() {
+  loginWithFacebook(): Promise<boolean>{
     const provider = new firebase.auth.FacebookAuthProvider();
     return this.authLogin(provider).then((result) => {
       return true;
     });
   }
 
-  authLogin(provider: firebase.auth.AuthProvider) {
+  authLogin(provider: firebase.auth.AuthProvider): Promise<Observable<boolean>> {
     return this.afAuth
       .signInWithPopup(provider)
       .then((result) => {
@@ -80,7 +82,7 @@ export class AuthService {
       })
   }
 
-  setUserData(user: firebase.User | null) {
+  setUserData(user: firebase.User | null): Observable<boolean> {
     if (!user) {      
       return from(this.signOut().then((r) => false));
     }
@@ -109,7 +111,7 @@ export class AuthService {
       .then((r) => true));  
   }
 
-  signOut() {
+  signOut(): Promise<void>{
     return this.afAuth.signOut();
   }
 

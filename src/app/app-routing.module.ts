@@ -4,15 +4,15 @@ import { HomeComponent } from './pages/home/home.component';
 import { IsLoggedInGuard } from './core/guards/is-logged-in.guard';
 import { AuthGuard } from './core/guards/auth.guard';
 import { AuthFormComponent } from './pages/auth-form/auth-form.component';
-import { QuastionForm } from './pages/quastion-form/quastion-form.component';
-import { QuastionComponent } from './pages/quastion/quastion.component';
+import { QuestionForm } from './pages/question-form/question-form.component';
+import { QuestionComponent } from './pages/question/question.component';
 
 const routes: Routes = [
   { path: 'log-in', component: AuthFormComponent, canActivate: [IsLoggedInGuard] },
   { path: 'sign-up', component: AuthFormComponent, canActivate: [IsLoggedInGuard] },
-  { path: 'createquastion', component: QuastionForm },
-  { path: 'editquastion/:id', component: QuastionForm },
-  { path: 'quastion/:id', component: QuastionComponent },
+  { path: 'createquestion', component: QuestionForm },
+  { path: 'editquestion/:id', component: QuestionForm },
+  { path: 'question/:id', component: QuestionComponent },
   { path: '**', component: HomeComponent, canActivate: [AuthGuard] },
   { path: '', component: HomeComponent, canActivate: [AuthGuard]},
 ];

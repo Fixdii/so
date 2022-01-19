@@ -5,17 +5,17 @@ import { UIQuestion } from '../models';
   name: 'tagSort',
 })
 export class TagSortPipe implements PipeTransform {
-  transform(quastions: UIQuestion[], options: string[]): UIQuestion[] {
+  transform(questions: UIQuestion[], options: string[]): UIQuestion[] {
     if (options && options.length > 0) {
-      return quastions.filter((quastion) => {
+      return questions.filter((question) => {
         for (let option of options) {
-          if (quastion.tag.includes(option)) {
+          if (question.tag.includes(option)) {
             return true;
           }
         }
         return false;
       })
     }
-    return quastions;
+    return questions;
   }
 }

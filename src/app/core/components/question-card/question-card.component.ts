@@ -3,34 +3,34 @@ import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { UIQuestion, UserRole } from '../../models';
 import { AuthService } from '../../services/auth.service';
-import { QuastionsService } from '../../services/quastions.service';
+import { QuestionsService } from '../../services/questions.service';
 
 @Component({
-  selector: 'app-quastion-card',
-  templateUrl: './quastion-card.component.html',
-  styleUrls: ['./quastion-card.component.scss'],
+  selector: 'app-question-card',
+  templateUrl: './question-card.component.html',
+  styleUrls: ['./question-card.component.scss'],
 })
-export class QuastionCardComponent implements OnInit, OnDestroy {
+export class QuestionCardComponent implements OnInit, OnDestroy {
   @Input() toggle: boolean = false;
   @Input() post: UIQuestion;
   @Output() onChanged = new EventEmitter< UIQuestion[]>();
 
   ROLES = UserRole;
-  quastions: UIQuestion[];
+  questions: UIQuestion[];
   private destroy = new Subject<void>();
 
   userData = this.authService.userData;
   user = this.authService.user;
 
   constructor(
-    private quastionsService: QuastionsService,
+    private questionsService: QuestionsService,
     private authService: AuthService
   ) { }
 
   ngOnInit(): void {}
 
-  approveQuestion(key: string) {
-    this.quastionsService
+  approveQuestion(key: string): void{
+    this.questionsService
       .approveQuestion(key)
       .pipe(take(1))
       .subscribe((res) => {
@@ -40,8 +40,8 @@ export class QuastionCardComponent implements OnInit, OnDestroy {
       });
   }
 
-  deleteQuestion(key: string) {
-    this.quastionsService
+  deleteQuestion(key: string): void{
+    this.questionsService
       .deleteQuestion(key)
       .pipe(take(1))
       .subscribe((res) => {

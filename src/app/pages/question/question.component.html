@@ -1,23 +1,23 @@
-<div class="post" *ngIf="quastion">
+<div class="post" *ngIf="question">
   <div class="post_wrapper">
     <a class="post_back" routerLink="/"> Back </a>
     <div class="post_header">
-      <p class="post_author">{{ quastion.author }}</p>
+      <p class="post_author">{{ question.author }}</p>
       <p class="post_date">
-        {{ quastion.dateOfCreation | date: "yyyy-MM-dd HH:mm:ss" }}
+        {{ question.dateOfCreation | date: "yyyy-MM-dd HH:mm:ss" }}
       </p>
     </div>
     <div class="post_info">
       <div class="post_title">
-        <h2 class="comments_title">{{ quastion.title }}</h2>
+        <h2 class="comments_title">{{ question.title }}</h2>
       </div>
     </div>
     <p class="post_text">
-      {{ quastion.text }}
+      {{ question.text }}
     </p>
     <div class="post_buttons">
       <ul class="post_tags">
-        <li class="post_tag" *ngFor="let tag of quastion.tag">{{ tag }}</li>
+        <li class="post_tag" *ngFor="let tag of question.tag">{{ tag }}</li>
       </ul>
       <div>
         <button
@@ -25,8 +25,8 @@
           color="primary"
           class="post__btn-approve"
           type="button"
-          *ngIf="(userData | async)?.role === ROLES.Admin && !quastion.approved"
-          (click)="approveQuestion(quastion.id)"
+          *ngIf="(userData | async)?.role === ROLES.Admin && !question.approved"
+          (click)="approveQuestion(question.id)"
         >
           Approve
         </button>
@@ -34,8 +34,8 @@
           mat-raised-button
           color="accent"
           class="post_edit"
-          *ngIf="user?.email === quastion.author && !quastion.approved"
-          [routerLink]="['/editquastion', quastion.id]"
+          *ngIf="user?.email === question.author && !question.approved"
+          [routerLink]="['/editquestion', question.id]"
         >
           Edit question
         </button>
@@ -44,10 +44,10 @@
           color="warn"
           class="post_btn-delete"
           type="button"
-          (click)="deleteQuestion(quastion.id)"
+          (click)="deleteQuestion(question.id)"
           *ngIf="
             (userData | async)?.role === ROLES.Admin ||
-            user?.email === quastion.author
+            user?.email === question.author
           "
         >
           Delete
@@ -76,8 +76,8 @@
       </div>
       <div class="comments_wrapper">
         <h3 class="comments_title">Coments/Answers</h3>
-        <ul *ngIf="quastion.comments">
-          <li class="comments_answer" *ngFor="let comment of quastion.comments">
+        <ul *ngIf="question.comments">
+          <li class="comments_answer" *ngFor="let comment of question.comments">
             <div
               [ngClass]="{ resolve: comment?.isResolved }"
               class="comments_info"
@@ -100,23 +100,23 @@
                       class="comments_delete"
                       *ngIf="
                         (userData | async)?.role === ROLES.Admin ||
-                        user?.email === quastion.author ||
+                        user?.email === question.author ||
                         user?.email === comment.author
                       "
-                      (click)="deleteComment(quastion.id, comment.commentKey)"
+                      (click)="deleteComment(question.id, comment.commentKey)"
                     >
                       Delete
                     </button>
                     <input
-                      *ngIf="user?.email === quastion.author"
+                      *ngIf="user?.email === question.author"
                       id="{{ comment.id }}"
                       type="checkbox"
                       class="checkbox"
-                      (click)="resolve($event, quastion.id, comment.commentKey)"
+                      (click)="resolve($event, question.id, comment.commentKey)"
                       [checked]="comment?.isResolved"
                     />
                     <span
-                      *ngIf="user?.email === quastion.author"
+                      *ngIf="user?.email === question.author"
                       class="comments_checkbox"
                     >
                       Resolve

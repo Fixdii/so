@@ -4,19 +4,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { UIComment, UserRole } from 'src/app/core/models';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { QuastionsService } from 'src/app/core/services/quastions.service';
+import { QuestionsService } from 'src/app/core/services/questions.service';
 import firebase from 'firebase/compat/app';
 import { Subject } from 'rxjs';
 
 @Component({
-  selector: 'app-quastion',
-  templateUrl: './quastion.component.html',
-  styleUrls: ['./quastion.component.scss'],
+  selector: 'app-question',
+  templateUrl: './question.component.html',
+  styleUrls: ['./question.component.scss'],
 })
-export class QuastionComponent implements OnInit, OnDestroy {
+export class QuestionComponent implements OnInit, OnDestroy {
   ROLES = UserRole;
   id: string;
-  quastion: any;
+  question: any;
   formGroup: FormGroup;
   user: firebase.User;
   isResolve: boolean;
@@ -26,23 +26,23 @@ export class QuastionComponent implements OnInit, OnDestroy {
 
   constructor(
     private activateRoute: ActivatedRoute,
-    private quastionsService: QuastionsService,
+    private questionsService: QuestionsService,
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router
   ) {
-    this.getQuastions;
+    this.getQuestions;
     this.getUser;
   }
 
-  get getQuastions() {
-    return this.quastionsService
-      .getQuastions()
+  get getQuestions() {
+    return this.questionsService
+      .getQuestions()
       .pipe(takeUntil(this.destroy))
       .subscribe((data) => {
-        data.forEach((quastion) => {
-          if (this.id === quastion.id) {
-            this.quastion = quastion;
+        data.forEach((question) => {
+          if (this.id === question.id) {
+            this.question = question;
           }
         });
       });
@@ -50,7 +50,7 @@ export class QuastionComponent implements OnInit, OnDestroy {
 
   get getUser() {
     return this.authService.user.subscribe((data) => {
-      this.user = data;
+      return this.user = data;
     });
   }
 
@@ -64,41 +64,41 @@ export class QuastionComponent implements OnInit, OnDestroy {
     });
   }
 
-  approveQuestion(key: string) {
-    this.quastionsService
+  approveQuestion(key: string): void {
+    this.questionsService
       .approveQuestion(key)
-      .subscribe((res) => this.getQuastions);
+      .subscribe((res) => this.getQuestions);
   }
 
-  deleteQuestion(key: string) {
-    this.quastionsService.deleteQuestion(key).subscribe((res) => {
+  deleteQuestion(key: string): void {
+    this.questionsService.deleteQuestion(key).subscribe((res) => {
       if (res) {
         this.router.navigate(['']);
       }
     });
   }
 
-  deleteComment(keyQuestion: string, keyComment: string) {
-    this.quastionsService
+  deleteComment(keyQuestion: string, keyComment: string): void {
+    this.questionsService
       .deleteComment(keyQuestion, keyComment)
       .subscribe((res) => {
         if (res) {
-          this.getQuastions;
+          this.getQuestions;
         }
       });
   }
 
-  async resolve($event: any, keyQuestion: string, keyComment: string) {
+  resolve($event: any, keyQuestion: string, keyComment: string): void {
     this.isResolve = $event.target.checked;
 
-    this.quastionsService
+    this.questionsService
       .resolveComment(keyQuestion, keyComment, $event.target.checked)
       .subscribe(() => {
-        this.getQuastions;
+        this.getQuestions;
       });
   }
 
-  submit() {
+  submit(): void {
     const coment: UIComment = {
       date: +new Date(),
       author: this.user.email,
@@ -108,8 +108,8 @@ export class QuastionComponent implements OnInit, OnDestroy {
 
     this.formGroup.reset();
 
-    this.quastionsService.addComment(this.id, coment).subscribe(() => {
-      this.getQuastions;
+    this.questionsService.addComment(this.id, coment).subscribe(() => {
+      this.getQuestions;
     });
   }
 

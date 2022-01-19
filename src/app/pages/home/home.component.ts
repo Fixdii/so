@@ -1,10 +1,10 @@
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { TAGS, UIQuestion, UserData, UserRole } from 'src/app/core/models';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { QuastionsService } from 'src/app/core/services/quastions.service';
+import { QuestionsService } from 'src/app/core/services/questions.service';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +12,7 @@ import { QuastionsService } from 'src/app/core/services/quastions.service';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  quastions: UIQuestion[];
+  questions: UIQuestion[];
   userData: UserData;
   TAGS = TAGS;
   toggle = false;
@@ -24,53 +24,53 @@ export class HomeComponent implements OnInit, OnDestroy {
   private destroy = new Subject<void>();
 
   constructor(
-    private quastionsService: QuastionsService,
+    private questionsService: QuestionsService,
     private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
-    this.getQuastions;
+    this.getQuestions;
     this.authService.userData.subscribe((data) => {
       this.userData = data;      
       this.sortQuestions();
     });
   }
 
-  toggleDisplay() {
+  toggleDisplay(): void{
     this.toggle = !this.toggle;
   }
 
-  toggleMyQuestion() {
+  toggleMyQuestion(): void{
     this.isMyQuestion = !this.isMyQuestion;
   }
 
-  get getQuastions() {
-    return this.quastionsService
-      .getQuastions()
+  get getQuestions() {
+    return this.questionsService
+      .getQuestions()
       .pipe(takeUntil(this.destroy))
       .subscribe((data) => {
         if (data) {
-          this.quastions = data;
+          this.questions = data;
           this.sortQuestions();
         }
       });
   }
 
-  sortQuestions() {
+  sortQuestions(): void {
     if(!this.userData) {      
       return;
     }
 
-    this.quastions = this.quastions.filter(post=>{
-      if(this.userData.role === UserRole.Admin || post.approved || this.userData.email === post.author){
+    this.questions = this.questions.filter(question=>{
+      if(this.userData.role === UserRole.Admin || question.approved || this.userData.email === question.author){
         return true;            
       }  
       return false;
     });
   }
 
-  updateQuastion(quastions: UIQuestion[]) {
-    this.getQuastions;
+  updateQuestion(): void {
+    this.getQuestions;
   }
 
   ngOnDestroy(): void {

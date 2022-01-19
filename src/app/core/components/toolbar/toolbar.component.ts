@@ -17,7 +17,7 @@ export class ToolbarComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  async signOut() {
+  async signOut(): Promise<void>{
     await this.authService.signOut();
     await this.router.navigate([PATHS.LOG_IN]);
   }

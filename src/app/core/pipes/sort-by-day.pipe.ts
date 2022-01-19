@@ -5,13 +5,12 @@ import { UIQuestion } from '../models';
   name: 'sortByDay'
 })
 export class SortByDayPipe implements PipeTransform {
-
-  transform(quastions: UIQuestion[], option: number): UIQuestion[] {
-    if(quastions && option != 0){
-      return quastions.filter((quastion) => {        
-        return +new Date( +new Date() - +new Date(quastion.dateOfCreation)).getDate() - 1 < option;        
+  transform(questions: UIQuestion[], option: number): UIQuestion[] {
+    if(questions && option != 0){
+      return questions.filter((question) => {        
+        return +new Date( +new Date() - +new Date(question.dateOfCreation)).getDate() - 1 < option;        
       })
     }
-    return quastions;
+    return questions;
   }
 }

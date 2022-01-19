@@ -5,48 +5,48 @@ import { Subject } from 'rxjs';
 import { switchMap, takeUntil } from 'rxjs/operators';
 import { DBQuestion, TAGS } from 'src/app/core/models';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { QuastionsService } from 'src/app/core/services/quastions.service';
+import { QuestionsService } from 'src/app/core/services/questions.service';
 
 @Component({
-  selector: 'app-quastion-form',
-  templateUrl: './quastion-form.component.html',
-  styleUrls: ['./quastion-form.component.scss'],
+  selector: 'app-question-form',
+  templateUrl: './question-form.component.html',
+  styleUrls: ['./question-form.component.scss'],
 })
-export class QuastionForm implements OnInit, OnDestroy{
+export class QuestionForm implements OnInit, OnDestroy{
   TAGS = TAGS;
   formGroup: FormGroup;
   email: string;
   tags: string[] = [];
   id: string;
   isEdit: boolean;
-  quastionText: string;
-  quastionTitle: string;
-  quastionTags: string[] = [];
+  questionText: string;
+  questionTitle: string;
+  questionTags: string[] = [];
   private destroy = new Subject<void>();
 
 
   constructor(
     private fb: FormBuilder,
-    private quastionsService: QuastionsService,
+    private questionsService: QuestionsService,
     private router: Router,
     private authService: AuthService,
     private activateRoute: ActivatedRoute
   ) {
-    if (this.activateRoute.snapshot.routeConfig.path === 'editquastion/:id') {
+    if (this.activateRoute.snapshot.routeConfig.path === 'editquestion/:id') {
       this.isEdit = true;
-      this.getInfoQuastion;
+      this.getInfoQuestion;
     }
   }
 
-  get getInfoQuastion() {
-    return this.quastionsService.getQuastions()
+  get getInfoQuestion() {
+    return this.questionsService.getQuestions()
     .pipe(takeUntil(this.destroy)).subscribe((data) => {
-      data.forEach((quastion) => {
-        if (this.id === quastion.id) {
-          this.quastionTitle = quastion.title;
-          this.quastionText = quastion.text;
-          this.quastionTags = quastion.tag;
-          this.formGroup.patchValue({ tag: quastion.tag });
+      data.forEach((question) => {
+        if (this.id === question.id) {
+          this.questionTitle = question.title;
+          this.questionText = question.text;
+          this.questionTags = question.tag;
+          this.formGroup.patchValue({ tag: question.tag });
         }
       });
     });
@@ -73,7 +73,7 @@ export class QuastionForm implements OnInit, OnDestroy{
     });
   }
 
-  submit() {
+  submit(): void{
     const question: DBQuestion = {
       approved: false,
       author: this.email,
@@ -82,13 +82,13 @@ export class QuastionForm implements OnInit, OnDestroy{
     };
 
     if (this.isEdit) {
-      this.quastionsService.editQuestion(this.id, question).pipe(takeUntil(this.destroy)).subscribe((res) => {
+      this.questionsService.editQuestion(this.id, question).pipe(takeUntil(this.destroy)).subscribe((res) => {
         if (res) {
-          this.router.navigate([`/quastion/${this.id}`]);
+          this.router.navigate([`/question/${this.id}`]);
         }
       });
     } else {
-      this.quastionsService.sendQuastion(question).pipe(takeUntil(this.destroy)).subscribe((res) => {
+      this.questionsService.sendQuestion(question).pipe(takeUntil(this.destroy)).subscribe((res) => {
         if (res) {
           this.router.navigate(['']);
         }
@@ -96,12 +96,12 @@ export class QuastionForm implements OnInit, OnDestroy{
     }
   }
 
-  checkTag(quastionTag: string): boolean {
-    return !!this.quastionTags.find((tag) => tag === quastionTag);
+  checkTag(questionTag: string): boolean {
+    return !!this.questionTags.find((tag) => tag === questionTag);
   }
 
-  addTag($event: any) {
-    this.tags = this.quastionTags;
+  addTag($event: any): void {
+    this.tags = this.questionTags;
 
     if ($event.target.checked) {
       this.tags.push($event.target.value);

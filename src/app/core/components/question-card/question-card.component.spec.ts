@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { QuastionForm } from './quastion-form.component';
+import { QuestionCardComponent } from './question-card.component';
 
-describe('CreatequastionComponent', () => {
-  let component: QuastionForm;
-  let fixture: ComponentFixture<QuastionForm>;
+describe('QuestionsComponent', () => {
+  let component: QuestionCardComponent;
+  let fixture: ComponentFixture<QuestionCardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ QuastionForm ]
+      declarations: [ QuestionCardComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(QuastionForm);
+    fixture = TestBed.createComponent(QuestionCardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

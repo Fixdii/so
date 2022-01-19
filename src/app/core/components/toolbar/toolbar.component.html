@@ -1,7 +1,7 @@
 <div class="toolbar" role="banner">
   <a routerLink="" class="logo">LOGO</a>
   <div class="spacer"></div>
-  <button mat-raised-button color="primary" *ngIf="authService.user | async" routerLink="createquastion">
+  <button mat-raised-button color="primary" *ngIf="authService.user | async" routerLink="createquestion">
     Add question
   </button>
   <a rel="noopener" title="User">
@@ -15,7 +15,6 @@
     <p>{{ user.email ? user.email : "User" }}</p>
     <div class="example-button-container" style="margin-left: 10px;">
       <button mat-mini-fab [matMenuTriggerFor]="menu" color="primary" aria-label="Example icon button with a menu icon">
-        <!-- <mat-icon>menu</mat-icon> -->
         <mat-icon>more_vert</mat-icon>
       </button>
     </div>

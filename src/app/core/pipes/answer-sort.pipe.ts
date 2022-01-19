@@ -5,11 +5,10 @@ import { UIQuestion } from '../models';
   name: 'answerSort'
 })
 export class AnswerSortPipe implements PipeTransform {
-
-  transform(quastions: UIQuestion[], options: string): UIQuestion[] {    
+  transform(questions: UIQuestion[], options: string): UIQuestion[] {    
     if (options === 'true') {
-      return quastions.filter((quastion) => {      
-        for(let comment of quastion.comments){
+      return questions.filter((question) => {      
+        for(let comment of question.comments){
           if(comment.isResolved === true){
             return true;
           }
@@ -17,8 +16,8 @@ export class AnswerSortPipe implements PipeTransform {
         return false;
       })
     }else if (options === 'false'){
-       return quastions.filter((quastion) => {      
-        for(let comment of quastion.comments){
+       return questions.filter((question) => {      
+        for(let comment of question.comments){
           if(comment.isResolved === true){
             return false;
           }
@@ -26,7 +25,7 @@ export class AnswerSortPipe implements PipeTransform {
         return true;
       })
     }
-    return quastions;
+    return questions;
   }
 
 }

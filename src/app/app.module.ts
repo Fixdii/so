@@ -25,11 +25,11 @@ import { environment } from 'src/environments/environment';
 import { HomeComponent } from './pages/home/home.component';
 import { AppRoutingModule } from './app-routing.module';
 import { UserNamePipe } from './core/pipes/user-name.pipe';
-import { QuastionForm } from './pages/quastion-form/quastion-form.component';
-import { QuastionComponent } from './pages/quastion/quastion.component';
+import { QuestionForm } from './pages/question-form/question-form.component';
+import { QuestionComponent } from './pages/question/question.component';
 import { DateSortPipe } from './core/pipes/date-sort.pipe';
 import { MyQuestionsPipe } from './core/pipes/my-questions.pipe';
-import { QuastionCardComponent } from './core/components/quastion-card/quastion-card.component';
+import { QuestionCardComponent } from './core/components/question-card/question-card.component';
 import { TagSortPipe } from './core/pipes/tag-sort.pipe';
 import { AnswerSortPipe } from './core/pipes/answer-sort.pipe';
 import { SortByDayPipe } from './core/pipes/sort-by-day.pipe';
@@ -40,9 +40,9 @@ import { SortByDayPipe } from './core/pipes/sort-by-day.pipe';
     AuthFormComponent, 
     HomeComponent, 
     UserNamePipe, 
-    QuastionCardComponent, 
-    QuastionForm, 
-    QuastionComponent,
+    QuestionCardComponent, 
+    QuestionForm, 
+    QuestionComponent,
     DateSortPipe,
     MyQuestionsPipe,
     TagSortPipe,

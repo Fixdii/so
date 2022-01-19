@@ -50,28 +50,27 @@ export class AuthFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  submit() {
+  submit(): void {
     const { email, password } = this.formGroup.value;
     this.error = '';
     this.handler(this.signIn(email, password));
   }
 
-  signIn(email: string, password: string) {
+  signIn(email: string, password: string): Observable<boolean> {
     return this.isSignUp
       ? this.authService.signUp(email, password)
       : this.authService.logIn(email, password);
   }
 
-  loginGoogle() {
+  loginGoogle(): void {
     this.handler(this.authService.loginWithGoogle());
-    // this.authService.loginWithGoogle();
   }
 
-  loginFacebook() {
+  loginFacebook(): void {
     this.handler(this.authService.loginWithFacebook());
   }
 
-  handler(promise: Promise<boolean> | Observable<boolean> ) {
+  handler(promise: Promise<boolean> | Observable<boolean> ): void{
     if (promise instanceof Promise) {
       promise
         .then((res) => {
