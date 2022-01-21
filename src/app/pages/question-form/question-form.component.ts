@@ -34,21 +34,16 @@ export class QuestionForm implements OnInit, OnDestroy{
   ) {
     if (this.activateRoute.snapshot.routeConfig.path === 'editquestion/:id') {
       this.isEdit = true;
-      this.getInfoQuestion;
     }
   }
 
-  get getInfoQuestion() {
-    return this.questionsService.getQuestions()
-    .pipe(takeUntil(this.destroy)).subscribe((data) => {
-      data.forEach((question) => {
-        if (this.id === question.id) {
+  getInfoQuestion() {    
+   this.questionsService.getQuestion(this.id)
+    .pipe(takeUntil(this.destroy)).subscribe((question) => {      
           this.questionTitle = question.title;
           this.questionText = question.text;
           this.questionTags = question.tag;
           this.formGroup.patchValue({ tag: question.tag });
-        }
-      });
     });
   }
 
@@ -61,8 +56,7 @@ export class QuestionForm implements OnInit, OnDestroy{
 
     if (this.isEdit) {
       this.activateRoute.paramMap
-        .pipe(switchMap((params) => params.getAll('id')))
-        .pipe(takeUntil(this.destroy))
+        .pipe(takeUntil(this.destroy),switchMap((params) => params.getAll('id')))
         .subscribe((data) => (this.id = data));
     }
 
@@ -71,6 +65,8 @@ export class QuestionForm implements OnInit, OnDestroy{
         this.email = res.email;
       }      
     });
+
+    this.getInfoQuestion();
   }
 
   submit(): void{

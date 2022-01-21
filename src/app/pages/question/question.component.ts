@@ -30,29 +30,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private fb: FormBuilder,
     private router: Router
-  ) {
-    this.getQuestions;
-    this.getUser;
-  }
-
-  get getQuestions() {
-    return this.questionsService
-      .getQuestions()
-      .pipe(takeUntil(this.destroy))
-      .subscribe((data) => {
-        data.forEach((question) => {
-          if (this.id === question.id) {
-            this.question = question;
-          }
-        });
-      });
-  }
-
-  get getUser() {
-    return this.authService.user.subscribe((data) => {
-      return this.user = data;
-    });
-  }
+  ) {}
 
   ngOnInit(): void {
     this.activateRoute.paramMap
@@ -62,12 +40,32 @@ export class QuestionComponent implements OnInit, OnDestroy {
     this.formGroup = this.fb.group({
       text: ['', Validators.required],
     });
+
+    this.getUser();
+    this.getQuestion();
+  }
+
+  getQuestion(): void{
+    this.questionsService
+      .getQuestion(this.id)
+      .pipe(takeUntil(this.destroy))
+      .subscribe((question) => {
+        this.question = question;
+    });
+  }
+
+  getUser(): void{
+    this.authService.user
+    .pipe(takeUntil(this.destroy))
+    .subscribe((data) => {
+      this.user = data;
+    });
   }
 
   approveQuestion(key: string): void {
     this.questionsService
       .approveQuestion(key)
-      .subscribe((res) => this.getQuestions);
+      .subscribe((res) => this.getQuestion());
   }
 
   deleteQuestion(key: string): void {
@@ -83,7 +81,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
       .deleteComment(keyQuestion, keyComment)
       .subscribe((res) => {
         if (res) {
-          this.getQuestions;
+          this.getQuestion();
         }
       });
   }
@@ -94,7 +92,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
     this.questionsService
       .resolveComment(keyQuestion, keyComment, $event.target.checked)
       .subscribe(() => {
-        this.getQuestions;
+        this.getQuestion();
       });
   }
 
@@ -109,7 +107,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
     this.formGroup.reset();
 
     this.questionsService.addComment(this.id, coment).subscribe(() => {
-      this.getQuestions;
+      this.getQuestion();
     });
   }
 

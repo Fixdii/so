@@ -60,26 +60,32 @@ export class AuthService {
     );
   }
 
-  loginWithGoogle(): Promise<boolean> {
+  loginWithGoogle(): Observable<boolean> {
     const provider = new firebase.auth.GoogleAuthProvider();
-    return this.authLogin(provider).then((result) => {
-      return true;
-    });
-  }
-
-  loginWithFacebook(): Promise<boolean>{
-    const provider = new firebase.auth.FacebookAuthProvider();
-    return this.authLogin(provider).then((result) => {
-      return true;
-    });
-  }
-
-  authLogin(provider: firebase.auth.AuthProvider): Promise<Observable<boolean>> {
-    return this.afAuth
-      .signInWithPopup(provider)
-      .then((result) => {
-        return this.setUserData(result.user);
+    return this.authLogin(provider).pipe(
+      map((result) => {
+        return true;
       })
+    )
+    
+  }
+
+  loginWithFacebook(): Observable<boolean>{
+    const provider = new firebase.auth.FacebookAuthProvider();
+    return this.authLogin(provider).pipe(
+      map((result) => {
+        return true;
+      })
+    )
+  }
+
+  authLogin(provider: firebase.auth.AuthProvider): Observable<boolean> {
+    return from(this.afAuth
+      .signInWithPopup(provider)).pipe(
+        mergeMap(result => {
+          return this.setUserData(result.user);
+        })
+      );
   }
 
   setUserData(user: firebase.User | null): Observable<boolean> {
@@ -103,12 +109,25 @@ export class AuthService {
       role: user.email === "walera2001@gmail.com" ? UserRole.Admin : UserRole.User,
     };
 
-
-    return from(userRef
-      .set(userData, {
-        merge: true, 
+    return this.getUserData(user).pipe(
+      mergeMap(res => {
+        if (res == null) {
+          return from(userRef
+            .set(userData, {
+              merge: true,
+            })
+            .then((r) => true));
+        } else {
+          return of(true);
+        }
       })
-      .then((r) => true));  
+    )
+
+    // return from(userRef
+    //   .set(userData, {
+    //     merge: true, 
+    //   })
+    //   .then((r) => true));  
   }
 
   signOut(): Promise<void>{

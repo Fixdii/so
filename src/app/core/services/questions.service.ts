@@ -44,6 +44,24 @@ export class QuestionsService {
       );
   }
 
+  getQuestion(key: string): Observable<UIQuestion> {
+    return this.http.get<DBQuestion>(`${DBUrl}/${key}.json`).pipe(map((res=>{  
+      return {
+        ...res,
+        id: '-MstrtN2ZBTZDqN0A1hY',
+        comments: Object.keys(res.comments || {}).map(
+          (commentKey) => {
+            return {
+              ...res.comments[commentKey],
+              commentKey: commentKey,
+            }
+          }
+        ),
+      }; 
+    })))
+
+  }
+
   approveQuestion(key: string): Observable<boolean> {
     return this.http
       .patch<StoreObject<DBQuestion>>(

@@ -33,6 +33,7 @@ import { QuestionCardComponent } from './core/components/question-card/question-
 import { TagSortPipe } from './core/pipes/tag-sort.pipe';
 import { AnswerSortPipe } from './core/pipes/answer-sort.pipe';
 import { SortByDayPipe } from './core/pipes/sort-by-day.pipe';
+import { AuthService } from './core/services/auth.service';
 @NgModule({
   declarations: [
     AppComponent,
@@ -69,7 +70,9 @@ import { SortByDayPipe } from './core/pipes/sort-by-day.pipe';
     MatFormFieldModule,
     MatCheckboxModule
   ],
-  providers: [],
+  providers: [
+    AuthService
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

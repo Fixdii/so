@@ -29,7 +29,8 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.getQuestions;
+    this.getQuestions();
+
     this.authService.userData.subscribe((data) => {
       this.userData = data;      
       this.sortQuestions();
@@ -44,13 +45,13 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.isMyQuestion = !this.isMyQuestion;
   }
 
-  get getQuestions() {
-    return this.questionsService
+  getQuestions(): void{
+    this.questionsService
       .getQuestions()
       .pipe(takeUntil(this.destroy))
       .subscribe((data) => {
         if (data) {
-          this.questions = data;
+          this.questions = data;          
           this.sortQuestions();
         }
       });
@@ -70,7 +71,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   updateQuestion(): void {
-    this.getQuestions;
+    this.getQuestions();
   }
 
   ngOnDestroy(): void {
