@@ -106,7 +106,7 @@ export class AuthService {
         'https://material.angular.io/assets/img/examples/shiba1.jpg',
       emailVerified: user.emailVerified,
       deleted: false,
-      role: user.email === "walera2001@gmail.com" ? UserRole.Admin : UserRole.User,
+      role: UserRole.User,
     };
 
     return this.getUserData(user).pipe(
@@ -122,12 +122,6 @@ export class AuthService {
         }
       })
     )
-
-    // return from(userRef
-    //   .set(userData, {
-    //     merge: true, 
-    //   })
-    //   .then((r) => true));  
   }
 
   signOut(): Promise<void>{

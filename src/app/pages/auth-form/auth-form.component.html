@@ -1,4 +1,4 @@
-<form [formGroup]="formGroup" (ngSubmit)="submit()" class="formAuth" role="form">
+<form [formGroup]="formGroup" (ngSubmit)="submit()" class="formAuth form-color" role="form">
   <h1 class="formTitle">{{ isSignUp ? 'Sign Up' : 'Log In' }}</h1>
 
   <div class="error" *ngIf="error">
@@ -11,8 +11,7 @@
     <div class="form-group col-sm-12">
       <label for="inputEmail3" class="control-label">Email</label>
       <div class="col-sm-12">
-        <input class="form-control" formControlName="email" name="email" id="inputEmail3" placeholder="Email">
-
+        <input class="input" formControlName="email" name="email" id="inputEmail3" placeholder="Email">
         <ng-container *ngIf="formGroup.get('email') as control">
           <div class="error" *ngIf="control?.invalid && control?.touched">
             <span class="error_message" *ngIf="control?.errors?.required">
@@ -28,8 +27,7 @@
     <div class="form-group col-sm-12">
       <label for="inputPassword3" class="control-label">Password</label>
       <div class="col-sm-12">
-        <input class="form-control" formControlName="password" name="password" id="inputPassword3" placeholder="Password">
-
+        <input class="input" formControlName="password" id="inputPassword3" placeholder="Password">
         <ng-container *ngIf="formGroup.get('password') as control">
           <div class="error"  
             *ngIf="control?.invalid && control?.touched">

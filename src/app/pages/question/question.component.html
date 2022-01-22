@@ -26,7 +26,7 @@
           class="post__btn-approve"
           type="button"
           *ngIf="(userData | async)?.role === ROLES.Admin && !question.approved"
-          (click)="approveQuestion(question.id)"
+          (click)="approveQuestion()"
         >
           Approve
         </button>
@@ -35,7 +35,7 @@
           color="accent"
           class="post_edit"
           *ngIf="user?.email === question.author && !question.approved"
-          [routerLink]="['/editquestion', question.id]"
+          [routerLink]="['/editquestion', id]"
         >
           Edit question
         </button>
@@ -44,7 +44,7 @@
           color="warn"
           class="post_btn-delete"
           type="button"
-          (click)="deleteQuestion(question.id)"
+          (click)="deleteQuestion()"
           *ngIf="
             (userData | async)?.role === ROLES.Admin ||
             user?.email === question.author
@@ -103,7 +103,7 @@
                         user?.email === question.author ||
                         user?.email === comment.author
                       "
-                      (click)="deleteComment(question.id, comment.commentKey)"
+                      (click)="deleteComment(comment.commentKey)"
                     >
                       Delete
                     </button>
@@ -112,7 +112,7 @@
                       id="{{ comment.id }}"
                       type="checkbox"
                       class="checkbox"
-                      (click)="resolve($event, question.id, comment.commentKey)"
+                      (click)="resolve($event, comment.commentKey)"
                       [checked]="comment?.isResolved"
                     />
                     <span

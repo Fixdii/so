@@ -62,35 +62,35 @@ export class QuestionComponent implements OnInit, OnDestroy {
     });
   }
 
-  approveQuestion(key: string): void {
+  approveQuestion(): void {
     this.questionsService
-      .approveQuestion(key)
+      .approveQuestion(this.id)
       .subscribe((res) => this.getQuestion());
   }
 
-  deleteQuestion(key: string): void {
-    this.questionsService.deleteQuestion(key).subscribe((res) => {
+  deleteQuestion(): void {    
+    this.questionsService.deleteQuestion(this.id).subscribe((res) => {
       if (res) {
         this.router.navigate(['']);
       }
     });
   }
 
-  deleteComment(keyQuestion: string, keyComment: string): void {
+  deleteComment(keyComment: string): void {    
     this.questionsService
-      .deleteComment(keyQuestion, keyComment)
+      .deleteComment(this.id, keyComment)
       .subscribe((res) => {
-        if (res) {
-          this.getQuestion();
+        if (res) {          
+          this.getQuestion();          
         }
       });
   }
 
-  resolve($event: any, keyQuestion: string, keyComment: string): void {
+  resolve($event: any, keyComment: string): void {
     this.isResolve = $event.target.checked;
 
     this.questionsService
-      .resolveComment(keyQuestion, keyComment, $event.target.checked)
+      .resolveComment(this.id, keyComment, $event.target.checked)
       .subscribe(() => {
         this.getQuestion();
       });

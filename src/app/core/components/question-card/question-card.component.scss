@@ -31,6 +31,8 @@ p {
     display: flex;
     margin-bottom: 30px;
     margin-top: 30px;
+    padding-left: 0px;
+    max-width: 219px;
   }
 
   &_tag {
@@ -38,10 +40,11 @@ p {
     font-size: 10px;
     background: #3f51b5;
     color: white;
-    width: 30px;
+    width: 50px;
     padding: 5px;
     border-radius: 16px;
     text-align: center;
+    overflow: hidden;
   }
 
   &_row {

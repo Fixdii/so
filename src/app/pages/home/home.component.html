@@ -48,10 +48,11 @@
       <mat-icon>swap_vert</mat-icon>
       sort
     </button>
-    <a class="toggleDisplay" style="font-size: 20px;" (click)="toggleDisplay()">
+    <a class="toggleDisplay" style="font-size: 41px;" (click)="toggleDisplay()">
       <mat-icon *ngIf="!toggle">reorder</mat-icon>
       <mat-icon *ngIf="toggle">view_module</mat-icon>
     </a>
+    <mat-slide-toggle (click)="toggleDarkMode()" [(ngModel)]="isDarkMode">Dark mode</mat-slide-toggle>
   </div>
 
 </div>
