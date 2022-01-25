@@ -2,10 +2,11 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
-import { switchMap, takeUntil } from 'rxjs/operators';
-import { DBQuestion, TAGS } from 'src/app/core/models';
+import { takeUntil } from 'rxjs/operators';
+import { DBQuestion, PATHS, TAGS } from 'src/app/core/models';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { QuestionsService } from 'src/app/core/services/questions.service';
+import { ThemeService } from 'src/app/core/services/theme.service';
 
 @Component({
   selector: 'app-question-form',
@@ -14,36 +15,35 @@ import { QuestionsService } from 'src/app/core/services/questions.service';
 })
 export class QuestionForm implements OnInit, OnDestroy{
   TAGS = TAGS;
+  PATHS = PATHS;
   formGroup: FormGroup;
   email: string;
-  tags: string[] = [];
   id: string;
   isEdit: boolean;
-  questionText: string;
-  questionTitle: string;
-  questionTags: string[] = [];
+  isDarkMode: boolean;
   private destroy = new Subject<void>();
-
 
   constructor(
     private fb: FormBuilder,
     private questionsService: QuestionsService,
     private router: Router,
     private authService: AuthService,
-    private activateRoute: ActivatedRoute
+    private activateRoute: ActivatedRoute,
+    private themeService: ThemeService,
   ) {
-    if (this.activateRoute.snapshot.routeConfig.path === 'editquestion/:id') {
+
+    if (this.activateRoute.snapshot.routeConfig.path === `${PATHS.EDIT_QESTION}/:id`) {
       this.isEdit = true;
     }
+
+    this.themeService.initTheme();
+    this.isDarkMode = this.themeService.isDarkMode();
   }
 
   getInfoQuestion() {    
    this.questionsService.getQuestion(this.id)
     .pipe(takeUntil(this.destroy)).subscribe((question) => {      
-          this.questionTitle = question.title;
-          this.questionText = question.text;
-          this.questionTags = question.tag;
-          this.formGroup.patchValue({ tag: question.tag });
+          this.formGroup.patchValue({ tag: question.tag, title: question.title, text: question.text });
     });
   }
 
@@ -55,9 +55,8 @@ export class QuestionForm implements OnInit, OnDestroy{
     });
 
     if (this.isEdit) {
-      this.activateRoute.paramMap
-        .pipe(takeUntil(this.destroy),switchMap((params) => params.getAll('id')))
-        .subscribe((data) => (this.id = data));
+      this.id = this.activateRoute.snapshot.params.id;
+      this.getInfoQuestion();
     }
 
     this.authService.user.subscribe((res) => {
@@ -65,8 +64,6 @@ export class QuestionForm implements OnInit, OnDestroy{
         this.email = res.email;
       }      
     });
-
-    this.getInfoQuestion();
   }
 
   submit(): void{
@@ -80,7 +77,7 @@ export class QuestionForm implements OnInit, OnDestroy{
     if (this.isEdit) {
       this.questionsService.editQuestion(this.id, question).pipe(takeUntil(this.destroy)).subscribe((res) => {
         if (res) {
-          this.router.navigate([`/question/${this.id}`]);
+          this.router.navigate([`/${PATHS.QUESTION}/${this.id}`]);
         }
       });
     } else {
@@ -92,24 +89,25 @@ export class QuestionForm implements OnInit, OnDestroy{
     }
   }
 
-  checkTag(questionTag: string): boolean {
-    return !!this.questionTags.find((tag) => tag === questionTag);
+  checkTag(tag: string): boolean {
+    return this.formGroup && (this.formGroup.controls.tag.value || []).includes(tag);
   }
 
-  addTag($event: any): void {
-    this.tags = this.questionTags;
+  addTag(tag: string): void {
+    const tagsControl = this.formGroup.controls.tag;
+    const tags: string[] = tagsControl.value;
 
-    if ($event.target.checked) {
-      this.tags.push($event.target.value);
+    if (!this.checkTag(tag)) {
+      tags.push(tag);
     } else {
-      this.tags.forEach((value, index) => {
-        if ($event.target.value === value) {
-          this.tags.splice(index, 1);
+      tags.forEach((value, index) => {
+        if (tag === value) {
+          tags.splice(index, 1);
         }
       });
     }
 
-    this.formGroup.patchValue({ tag: this.tags });
+    tagsControl.patchValue(tags);
   }
 
   ngOnDestroy(): void {

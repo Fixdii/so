@@ -1,7 +1,6 @@
 <div class="createquestion">
   <form class="form-color" [formGroup]="formGroup" (ngSubmit)="submit()">
-    <h2 *ngIf="!isEdit" class="createquestion_title">New Question</h2>
-    <h2 *ngIf="isEdit" class="createquestion_title">Edit Question</h2>
+    <h2 class="createquestion_title">{{ isEdit ? 'Edit Question' : 'New Question'}}</h2>
     <div class="createquestion_item">
       <label for="title">Title</label>
       <div class="createquestion_input">
@@ -11,7 +10,6 @@
           class="input"
           placeholder="Title"
           formControlName="title"
-          [(ngModel)]="questionTitle"
         />
         <ng-container *ngIf="formGroup.get('title')">
           <div
@@ -34,7 +32,6 @@
           class="textarea"
           placeholder="Type something..."
           formControlName="text"
-          [(ngModel)]="questionText"
         >
         </textarea>
         <ng-container *ngIf="formGroup.get('text')" class="error">
@@ -55,7 +52,7 @@
       <div class="createquestion_tags">
         <div *ngFor="let tag of TAGS" class="form-check">
           <input
-            (click)="addTag($event)"
+            (click)="addTag(tag)"
             class="form-check-input"
             [checked]="checkTag(tag)"
             type="checkbox"
@@ -80,12 +77,12 @@
     <div class="createquestion_button">
       <button
         type="submit"
-        [disabled]="!formGroup.valid && !questionTags"
+        [disabled]="!formGroup.valid"
         class="btn btn-primary"
       >
         Ok
       </button>
-      <button routerLink="/question/{{id}}" type="button" class="btn btn-danger">Cancel</button>
+      <button routerLink="/{{PATHS.QUESTION}}/{{id}}" type="button" class="btn btn-danger">Cancel</button>
     </div>
   </form>
 </div>

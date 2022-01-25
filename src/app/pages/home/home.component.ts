@@ -1,8 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { TAGS, UIQuestion, UserData, UserRole } from 'src/app/core/models';
+import { PATHS, TAGS, UIQuestion, UserData, UserRole } from 'src/app/core/models';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { QuestionsService } from 'src/app/core/services/questions.service';
 import { ThemeService } from 'src/app/core/services/theme.service';
@@ -16,12 +16,11 @@ export class HomeComponent implements OnInit, OnDestroy {
   questions: UIQuestion[];
   userData: UserData;
   TAGS = TAGS;
+  PATHS = PATHS;
   toggle = false;
   isMyQuestion = false;
   isSort = false;
-  tags = new FormControl();
-  isAnswer = new FormControl();
-  sortDay = new FormControl();
+  form: FormGroup;
   isDarkMode: boolean;
   private destroy = new Subject<void>();
 
@@ -37,9 +36,17 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.getQuestions();
 
-    this.authService.userData.subscribe((data) => {
+    this.authService.userData
+    .pipe(takeUntil(this.destroy))
+    .subscribe((data) => {
       this.userData = data;      
       this.sortQuestions();
+    });
+
+    this.form = new FormGroup({
+      tags: new FormControl(),
+      isAnswer: new FormControl(),
+      sortDay: new FormControl(),
     });
   }
 
