@@ -2,11 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap, takeUntil } from 'rxjs/operators';
-import { UIComment, UserRole } from 'src/app/core/models';
+import { PATHS, UIComment, UserRole } from 'src/app/core/models';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { QuestionsService } from 'src/app/core/services/questions.service';
 import firebase from 'firebase/compat/app';
 import { Subject } from 'rxjs';
+import { ThemeService } from 'src/app/core/services/theme.service';
 
 @Component({
   selector: 'app-question',
@@ -20,6 +21,9 @@ export class QuestionComponent implements OnInit, OnDestroy {
   formGroup: FormGroup;
   user: firebase.User;
   isResolve: boolean;
+  isDarkMode: boolean;
+  EDIT_QESTION = "/" + PATHS.EDIT_QESTION;
+  
   private destroy = new Subject<void>();
 
   userData = this.authService.userData;
@@ -29,8 +33,12 @@ export class QuestionComponent implements OnInit, OnDestroy {
     private questionsService: QuestionsService,
     private authService: AuthService,
     private fb: FormBuilder,
-    private router: Router
-  ) {}
+    private router: Router,
+    private themeService: ThemeService,
+  ) {
+    this.themeService.initTheme();
+    this.isDarkMode = this.themeService.isDarkMode();
+  }
 
   ngOnInit(): void {
     this.activateRoute.paramMap

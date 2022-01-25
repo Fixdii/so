@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { PATHS } from 'src/app/core/models';
+import { ThemeService } from 'src/app/core/services/theme.service';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -15,21 +16,24 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   error = '';
   activeRoute: string;
   isSignUp = false;
-  private destroy = new Subject<void>();
+  isDarkMode: boolean;
   formGroup: FormGroup;
+  private destroy = new Subject<void>();
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private activateRoute: ActivatedRoute
+    private activateRoute: ActivatedRoute,
+    private themeService: ThemeService,
   ) {
     this.activeRoute = this.activateRoute.snapshot.routeConfig.path;
+    this.themeService.initTheme();
+    this.isDarkMode = this.themeService.isDarkMode();
   }
 
   ngOnInit(): void {
     this.isSignUp = this.activeRoute === PATHS.SIGN_UP;
-
     this.formGroup = this.fb.group({
       email: [
         '',
