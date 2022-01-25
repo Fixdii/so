@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTr
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { PATHS } from '../models';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,7 @@ export class AuthGuard implements CanActivate {
       .pipe(
         tap(isLogged => {
           if (isLogged === false) {
-            this.router.navigate(['log-in']);
+            this.router.navigate([PATHS.LOG_IN]);
           }
         })
       );

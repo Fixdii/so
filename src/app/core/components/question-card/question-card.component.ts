@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { UIQuestion, UserRole } from '../../models';
+import { PATHS, UIQuestion, UserRole } from '../../models';
 import { AuthService } from '../../services/auth.service';
 import { QuestionsService } from '../../services/questions.service';
 
@@ -16,6 +16,7 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
   @Output() onChanged = new EventEmitter< UIQuestion[]>();
 
   ROLES = UserRole;
+  PATHS = PATHS;
   questions: UIQuestion[];
   private destroy = new Subject<void>();
 

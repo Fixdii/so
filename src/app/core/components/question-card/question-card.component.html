@@ -12,7 +12,7 @@
           </div>
         </mat-card-content>
         <mat-card-actions [ngClass]="{'card_button-row': toggle}"  class="card_button">
-          <button mat-raised-button color="primary" routerLink="/question/{{post.id}}">view</button>
+          <button mat-raised-button color="primary" routerLink="/{{PATHS.QUESTION}}/{{post.id}}">view</button>
           <button mat-raised-button color="accent" *ngIf="(userData | async)?.role === ROLES.Admin && !post.approved" (click)="approveQuestion(post.id)">approve</button>
           <button mat-raised-button color="warn" *ngIf="(userData | async)?.role === ROLES.Admin || (user | async)?.email === post.author" (click)="deleteQuestion(post.id)">delete</button>
         </mat-card-actions>

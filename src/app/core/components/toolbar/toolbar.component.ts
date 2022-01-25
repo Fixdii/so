@@ -9,6 +9,8 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./toolbar.component.scss'],
 })
 export class ToolbarComponent implements OnInit {
+  PATHS = PATHS;
+  
   constructor(
     public authService: AuthService,
     private router: Router

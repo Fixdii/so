@@ -35,7 +35,7 @@
           color="accent"
           class="post_edit"
           *ngIf="user?.email === question.author && !question.approved"
-          [routerLink]="['/editquestion', id]"
+          [routerLink]="[EDIT_QESTION, id]"
         >
           Edit question
         </button>

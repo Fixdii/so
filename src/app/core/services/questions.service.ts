@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { UIComment, DBQuestion, StoreObject, UIQuestion, DBUrl } from '../models';
+import { UIComment, DBQuestion, StoreObject, UIQuestion, PATHS } from '../models';
 
 @Injectable({
   providedIn: 'root',
@@ -13,7 +13,7 @@ export class QuestionsService {
   sendQuestion(question: DBQuestion): Observable<boolean> {
     return this.http
       .post(
-        `${DBUrl}.json`,
+        `${PATHS.DBUrl}.json`,
         question
       )
       .pipe(map((res) => Boolean(res)));
@@ -22,7 +22,7 @@ export class QuestionsService {
   getQuestions(): Observable<UIQuestion[]> {
     return this.http
       .get<StoreObject<DBQuestion>>(
-        `${DBUrl}.json`
+        `${PATHS.DBUrl}.json`
       )
       .pipe(
         map((res) => {
@@ -45,10 +45,10 @@ export class QuestionsService {
   }
 
   getQuestion(key: string): Observable<UIQuestion> {
-    return this.http.get<DBQuestion>(`${DBUrl}/${key}.json`).pipe(map((res=>{  
+    return this.http.get<DBQuestion>(`${PATHS.DBUrl}/${key}.json`).pipe(map((res=>{  
       return {
         ...res,
-        id: '-MstrtN2ZBTZDqN0A1hY',
+        id: key,
         comments: Object.keys(res.comments || {}).map(
           (commentKey) => {
             return {
@@ -65,7 +65,7 @@ export class QuestionsService {
   approveQuestion(key: string): Observable<boolean> {
     return this.http
       .patch<StoreObject<DBQuestion>>(
-        `${DBUrl}/${key}.json`,
+        `${PATHS.DBUrl}/${key}.json`,
         { approved: true }
       )
       .pipe(map((res) => Boolean(res)));
@@ -74,7 +74,7 @@ export class QuestionsService {
   deleteQuestion(key: string): Observable<boolean> {
     return this.http
       .delete<StoreObject<DBQuestion>>(
-        `${DBUrl}/${key}.json`
+        `${PATHS.DBUrl}/${key}.json`
       )
       .pipe(map((res) => !Boolean(res)));
   }
@@ -82,7 +82,7 @@ export class QuestionsService {
   addComment(key: string, comment: UIComment): Observable<boolean> {
     return this.http
       .post(
-        `${DBUrl}/${key}/comments.json`,
+        `${PATHS.DBUrl}/${key}/comments.json`,
         comment
       )
       .pipe(map((res) => Boolean(res)));
@@ -91,7 +91,7 @@ export class QuestionsService {
   deleteComment(keyQuestion: string, keyComment: string): Observable<boolean> {
     return this.http
       .delete<StoreObject<DBQuestion>>(
-        `${DBUrl}/${keyQuestion}/comments/${keyComment}.json`
+        `${PATHS.DBUrl}/${keyQuestion}/comments/${keyComment}.json`
       )
       .pipe(map((res) => !Boolean(res)));
   }
@@ -99,7 +99,7 @@ export class QuestionsService {
   resolveComment(keyQuestion: string, keyComment: string, e: boolean): Observable<boolean> {
     return this.http
       .patch<StoreObject<DBQuestion>>(
-        `${DBUrl}/${keyQuestion}/comments/${keyComment}.json`,
+        `${PATHS.DBUrl}/${keyQuestion}/comments/${keyComment}.json`,
         { isResolved: e }
       )
       .pipe(map((res) => !Boolean(res)));
@@ -108,7 +108,7 @@ export class QuestionsService {
   editQuestion(key: string, question: DBQuestion): Observable<boolean> {
     return this.http
       .patch<StoreObject<DBQuestion>>(
-        `${DBUrl}/${key}.json`,
+        `${PATHS.DBUrl}/${key}.json`,
         question
       )
       .pipe(map((res) => Boolean(res)));

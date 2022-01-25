@@ -1,7 +1,7 @@
 <div class="toolbar" role="banner">
   <a routerLink="" class="logo">LOGO</a>
   <div class="spacer"></div>
-  <button mat-raised-button color="primary" *ngIf="authService.user | async" routerLink="createquestion">
+  <button mat-raised-button color="primary" *ngIf="authService.user | async" routerLink="{{PATHS.CREATE_QESTION}}">
     Add question
   </button>
   <a rel="noopener" title="User">
