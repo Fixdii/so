@@ -93,7 +93,7 @@
                   <p class="comments_text">
                     {{ comment.text }}
                   </p>
-                  <div>
+                  <div class="comments_buttons">
                     <button
                       mat-raised-button
                       color="warn"
@@ -107,20 +107,21 @@
                     >
                       Delete
                     </button>
-                    <input
+                    <div *ngIf="!answerComent || comment.commentKey === answerComentKey">
+                      <input
                       *ngIf="user?.email === question.author"
-                      id="{{ comment.id }}"
+                      id="{{ comment.commentKey }}"
                       type="checkbox"
-                      class="checkbox"
+                      class="checkbox_input"
                       (click)="resolve($event, comment.commentKey)"
                       [checked]="comment?.isResolved"
                     />
                     <span
                       *ngIf="user?.email === question.author"
-                      class="comments_checkbox"
                     >
                       Resolve
                     </span>
+                    </div>                
                   </div>
                 </div>
               </div>

@@ -2,7 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { switchMap, takeUntil } from 'rxjs/operators';
-import { PATHS, UIComment, UserRole } from 'src/app/core/models';
+import { PATHS, UIComment, UIQuestion, UserRole } from 'src/app/core/models';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { QuestionsService } from 'src/app/core/services/questions.service';
 import firebase from 'firebase/compat/app';
@@ -17,12 +17,14 @@ import { ThemeService } from 'src/app/core/services/theme.service';
 export class QuestionComponent implements OnInit, OnDestroy {
   ROLES = UserRole;
   id: string;
-  question: any;
+  question: UIQuestion;
   formGroup: FormGroup;
   user: firebase.User;
   isResolve: boolean;
   isDarkMode: boolean;
   EDIT_QESTION = "/" + PATHS.EDIT_QESTION;
+  answerComent: any;
+  answerComentKey: any;
   
   private destroy = new Subject<void>();
 
@@ -59,6 +61,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy))
       .subscribe((question) => {
         this.question = question;
+        this.getAnswer();
     });
   }
 
@@ -68,6 +71,11 @@ export class QuestionComponent implements OnInit, OnDestroy {
     .subscribe((data) => {
       this.user = data;
     });
+  }
+
+  getAnswer(): void{    
+    this.answerComent = this.question?.comments.find(comment => comment.isResolved === true);
+    this.answerComentKey = this.answerComent?.commentKey;
   }
 
   approveQuestion(): void {
@@ -96,6 +104,7 @@ export class QuestionComponent implements OnInit, OnDestroy {
 
   resolve($event: any, keyComment: string): void {
     this.isResolve = $event.target.checked;
+    this.getAnswer();
 
     this.questionsService
       .resolveComment(this.id, keyComment, $event.target.checked)

@@ -124,8 +124,8 @@ export class AuthService {
     )
   }
 
-  signOut(): Promise<void>{
-    return this.afAuth.signOut();
+  signOut(): Promise<boolean>{
+    return this.afAuth.signOut().then(() => false);
   }
 
   getUserData(user: firebase.User | null): Observable<UserData | null> {
