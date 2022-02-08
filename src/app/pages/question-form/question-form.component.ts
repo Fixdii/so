@@ -16,7 +16,7 @@ import { ThemeService } from 'src/app/core/services/theme.service';
 export class QuestionForm implements OnInit, OnDestroy{
   TAGS = TAGS;
   PATHS = PATHS;
-  formGroup: FormGroup;
+  public formGroup: FormGroup;
   email: string;
   id: string;
   isEdit: boolean;
@@ -40,13 +40,6 @@ export class QuestionForm implements OnInit, OnDestroy{
     this.isDarkMode = this.themeService.isDarkMode();
   }
 
-  getInfoQuestion() {    
-   this.questionsService.getQuestion(this.id)
-    .pipe(takeUntil(this.destroy)).subscribe((question) => {      
-          this.formGroup.patchValue({ tag: question.tag, title: question.title, text: question.text });
-    });
-  }
-
   ngOnInit(): void {
     this.formGroup = this.fb.group({
       title: ['', Validators.required],
@@ -65,6 +58,13 @@ export class QuestionForm implements OnInit, OnDestroy{
       }      
     });
   }
+
+  getInfoQuestion(): void{    
+    this.questionsService.getQuestion(this.id)
+     .pipe(takeUntil(this.destroy)).subscribe((question) => {      
+           this.formGroup.patchValue({ tag: question.tag, title: question.title, text: question.text });
+     });
+   }
 
   submit(): void{
     const question: DBQuestion = {

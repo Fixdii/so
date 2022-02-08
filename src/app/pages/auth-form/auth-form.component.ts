@@ -17,7 +17,7 @@ export class AuthFormComponent implements OnInit, OnDestroy {
   activeRoute: string;
   isSignUp = false;
   isDarkMode: boolean;
-  formGroup: FormGroup;
+  public formGroup: FormGroup;
   private destroy = new Subject<void>();
 
   constructor(

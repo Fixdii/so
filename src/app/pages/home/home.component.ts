@@ -54,7 +54,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.toggle = !this.toggle;
   }
 
-  toggleDarkMode(){
+  toggleDarkMode(): void{
     this.isDarkMode = this.themeService.isDarkMode();
 
     this.isDarkMode

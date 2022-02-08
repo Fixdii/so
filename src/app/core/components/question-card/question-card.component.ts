@@ -17,7 +17,6 @@ export class QuestionCardComponent implements OnInit, OnDestroy {
 
   ROLES = UserRole;
   PATHS = PATHS;
-  questions: UIQuestion[];
   private destroy = new Subject<void>();
 
   userData = this.authService.userData;

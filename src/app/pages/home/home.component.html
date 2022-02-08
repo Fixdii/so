@@ -57,7 +57,6 @@
 
 </div>
 
-<!-- Посмотреть toggle style -->
 <div *ngIf="userData" [ngClass]="{'questionsCards_row': toggle, 'questionsCards': !toggle}">
   <app-question-card 
     (onChanged)="updateQuestion()"
